@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+    version="1.8">
+    
+    <pre-processing-commands>
+        <delete-jobs-in-group>*</delete-jobs-in-group>  <!-- clear all jobs in scheduler -->
+        <delete-triggers-in-group>*</delete-triggers-in-group> <!-- clear all triggers in scheduler -->
+    </pre-processing-commands>
+    
+    <processing-directives>
+        <!-- if there are any jobs/trigger in scheduler of same name (as in this file), overwrite them -->
+        <overwrite-existing-data>true</overwrite-existing-data>
+        <!-- if there are any jobs/trigger in scheduler of same name (as in this file), and over-write is false, ignore them rather then generating an error -->
+        <ignore-duplicates>false</ignore-duplicates> 
+    </processing-directives>
+    
+    <schedule>  
+    
+	    <job>
+	        <name>LimpiaTemporalJob</name>
+	        <group>ImportSaadJobs</group>
+	        <job-class>com.importsaad.job.LimpiaTemporalJob</job-class>	        
+            <durability>true</durability>	        
+            <recover>false</recover>	
+	        <job-data-map>
+	            <entry>
+	                <key>osName</key>
+	                <value>ImportSaadOS</value>
+	            </entry>	        
+	            <entry>
+	                <key>daysOld</key>
+	                <value>0</value> <!-- Days before or equal DataCreated -->
+	            </entry>
+	        </job-data-map>                               
+	    </job>   
+	    
+		<trigger>
+			<cron>
+				<name>LimpiaTemporalTrigger</name>
+				<group>ImportSaadTriggers</group>
+				<job-name>LimpiaTemporalJob</job-name>
+				<job-group>ImportSaadJobs</job-group>
+				<cron-expression>0 0 22 * * ?</cron-expression> <!-- Fire at 22:00 hrs every day -->
+			</cron>
+		</trigger>				         
+    
+    </schedule>   
+     
+</job-scheduling-data>
