@@ -1,0 +1,9 @@
+Import New CA into Trusted Certs:
+keytool -import -trustcacerts -file C:/Aplicaciones/jdk1.6.0_45/jre/lib/security/p8server.cer -alias P8SERVER -keystore C:/Aplicaciones/jdk1.6.0_45/jre/lib/security/cacerts
+
+List Trusted CA Certs:
+keytool -list -v -keystore C:/Aplicaciones/jdk1.6.0_45/jre/lib/security/cacerts
+
+password: changeit
+
+Reference: http://www.sslshopper.com/article-most-common-java-keytool-keystore-commands.html
