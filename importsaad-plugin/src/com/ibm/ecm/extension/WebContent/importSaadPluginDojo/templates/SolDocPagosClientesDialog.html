@@ -1,0 +1,176 @@
+<table width="100%" border="0" style="background-color:#FFFFFF;">
+		<tr>
+			<td width="20%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cliente:</td>
+			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-attach-point="clientesDiv"></div></td>	  			
+	</tr>
+		<tr>
+			<td width="20%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Empresa:</td>
+			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-attach-point="empresasDiv"></div></td>	  			
+	</tr>				  					
+</table>	
+<table width="100%" border="0" style="background-color:#FFFFFF;">
+		<tr>
+			<td width="20%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Saldo Cliente:<div data-dojo-type="ecm.widget.HoverHelp" message="Saldo actual del cliente inclyendo las solicitudes sin facturas asociadas."></div></td>
+			<td width="13%" align="center" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="saldoCliente">0.00</div></td>
+			<td width="20%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Devoluci&oacute;n Proveedor:<div data-dojo-type="ecm.widget.HoverHelp" message="Importe de la devoluci&oacute;n a solicitar del proveedor."></div></td>
+			<td width="13%" align="center" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="importeDevolucion">0.00</div></td>
+			<td width="20%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Importe Facturas:<div data-dojo-type="ecm.widget.HoverHelp" message="Importe total de las facturas seleccionadas que ser&aacute;n asociadas al pago."></div></td>
+			<td width="13%" align="center" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="importeTotalFacturas">0.00</div></td>	  			  				  				  			
+	</tr>											  					
+</table>			
+<div data-dojo-type="dijit.layout.ContentPane" region="center" class="paneNoOverflow" splitter="true" style="background-color:#FFFFFF;">	
+	<div data-dojo-attach-point="gridFacturasDiv" style="width: 100%;"></div>	
+</div>														
+	<table width="100%" border="0" style="background-color:#FFFFFF;">			
+		<tr>
+			<td width="100%" colspan="4" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Detalle del Comprobante de Pago</td>
+	</tr>
+		<tr>
+			<td width="25%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Fecha de Pago:</label></td>
+			<td width="25%"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="fechaPago" required=true constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+			<td width="25%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Importe:</label></td>
+			<td width="25%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="importePago" value=0 required=true data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>
+	</tr>						
+		<tr>
+			<td width="25%"><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;"></label>M&eacute;todo de Pago:<div data-dojo-type="ecm.widget.HoverHelp" message="La referencia va de acuerdo al m&eacute;todo de pago:<br><br><b>Transferencia:</b> Corresponde al n&uacute;mero de referencia de la transferencia.<br><b>Cheque:</b> Corresponde al n&uacute;mero de cheque.<br><b>Dep&oacute;sito en efectivo:</b> Corresponde al n&uacute;mero de referencia del dep&oacute;sito."></div></td>
+			<td colspan="3" width="25%" width="20%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">
+			<select data-dojo-attach-point="metodoPago" data-dojo-type="ecm.widget.Select" required=true data-dojo-attach-event="onChange: onMetodoPagoChange">
+				<option value="2">TRANSFERENCIA</option>
+				<option value="1">CHEQUE</option>
+				<option value="3">DEPÓSITO EN EFECTIVO</option>
+			</select>	  			
+			</td>	  			
+	</tr>		
+</table>
+<div data-dojo-attach-point="metodoPagoTransferenciaPane" style="display:none;">
+	<table width="100%" border="0" style="background-color:#FFFFFF;">									
+  		<tr>
+  			<td width="30%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">N&uacute;mero de Referencia:</label></td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="referenciaTransferencia" uppercase=true required=true maxlength="64"></div></td>
+		</tr>
+	</table>
+</div>
+<div data-dojo-attach-point="metodoPagoChequePane" style="display:none;">
+	<table width="100%" border="0" style="background-color:#FFFFFF;">									
+  		<tr>
+  			<td width="25%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Banco de Procedencia:</label></td>
+  			<td width="25%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">
+				<select data-dojo-attach-point="bancoCheque" required=true data-dojo-type="ecm.widget.Select">
+					<option value="">--SELECCIONAR--</option>
+					<option value="0">AFIRME</option>
+					<option value="1">BANAMEX</option>
+					<option value="2">BANCO AZTECA</option>
+					<option value="3">BANCO DEL BAJIO</option>
+					<option value="4">BANK OF AMERICA</option>
+					<option value="5">BANORTE</option>
+					<option value="6">BANREGIO</option>
+					<option value="7">BANSI</option>
+					<option value="8">BBVA BANCOMER</option>
+					<option value="9">HSBC</option>
+					<option value="10">INBURSA</option>
+					<option value="11">IXE</option>
+					<option value="12">SANTANDER SERFIN</option>
+					<option value="13">SCOTIABANK INVERLAT</option>					
+				</select>	  			
+  			</td>			  		
+  			<td width="25%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">N&uacute;mero de Cheque:</label></td>
+  			<td><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="numeroCheque" required=true maxlength="15" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
+		</tr>
+	</table>
+</div>
+<div data-dojo-attach-point="metodoPagoEfectivoPane" style="display:none;">
+	<table width="100%" border="0" style="background-color:#FFFFFF;">									
+  		<tr>
+  			<td width="25%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Banco de Dep&oacute;sito:</label></td>
+  			<td width="25%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">
+				<select data-dojo-attach-point="bancoDeposito" required=true data-dojo-type="ecm.widget.Select">
+					<option value="">--SELECCIONAR--</option>
+					<option value="0">AFIRME</option>
+					<option value="1">BANAMEX</option>
+					<option value="2">BANCO AZTECA</option>
+					<option value="3">BANCO DEL BAJIO</option>
+					<option value="4">BANK OF AMERICA</option>
+					<option value="5">BANORTE</option>
+					<option value="6">BANREGIO</option>
+					<option value="7">BANSI</option>
+					<option value="8">BBVA BANCOMER</option>
+					<option value="9">HSBC</option>
+					<option value="10">INBURSA</option>
+					<option value="11">IXE</option>
+					<option value="12">SANTANDER SERFIN</option>
+					<option value="13">SCOTIABANK INVERLAT</option>					
+				</select>	  			
+  			</td>	  		
+  			<td width="30%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">N&uacute;mero de Referencia:</label></td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="referenciaDeposito" uppercase=true required=true maxlength="64"></div></td>
+		</tr>
+	</table>
+</div>											
+<div data-dojo-attach-point="comprobantesPane" style="background-color:#FFFFFF;">
+	<table width="100%" border="0" style="background-color:#FFFFFF;">
+  		<tr>
+  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Archivo del Comprobante de Pago</td>
+		</tr>
+	</table>
+	<table width="100%" border="0" style="background-color:#FFFFFF;">				
+		<tr>
+			<td width="80%">
+				<form data-dojo-attach-point="_fileInputForm"
+					name="fileUploadForm"
+					enctype="multipart/form-data"
+					accept-charset="UTF-8"
+					method="post"
+					target="${id}_fileInputIFrame">
+					<input type="file"
+						id="${id}_fileInput"
+						name="uploadFile"
+						class="fileInput"
+						data-dojo-attach-point="_fileInput"
+						data-dojo-attach-event="onchange: checkFileButtons"/>
+					<iframe name="${id}_fileInputIFrame"
+						id="${id}_fileInputIFrame"
+						style="display: none">
+					</iframe>
+				</form>				
+			</td>
+			<td>
+				<button data-dojo-attach-point="addFileButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onFileAdd">Anexar Archivo</button>
+			</td>
+			<td>
+				<button data-dojo-attach-point="deleteFileButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onFileDelete">Eliminar Archivo</button>
+			</td>				
+		</tr>
+	</table>  
+	<div data-dojo-attach-point="comprobanteFilePane" style="display:none;">
+		<table width="100%" border="0" style="background-color:#FFFFFF;">
+			<tr>
+				<td width="10%"><div></div></td>
+				<td width="70%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="fileName"></div></td>
+				<td align="left"><button data-dojo-attach-point="vieFileButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onFileView">Ver</button></td>					
+			</tr>						
+		</table>				      	
+	</div>
+	</div>
+<table width="100%" border="0" style="background-color:#FFFFFF;">		
+		<tr>
+			<td width="40%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Observaciones de notificaci&oacute;n:</td>
+			<td align="left" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Omitir notificaci&oacute;n &nbsp;&nbsp;<div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="omitirEnvioCorreo" value=true data-dojo-props="checked: false"></td>	  		  			
+	</tr>
+		<tr>
+			<td width="100%" colspan="2"><div data-dojo-type="dijit.form.Textarea" style="width:100%;" data-dojo-attach-point="observaciones" maxlength="1000" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div></td>
+	</tr>	
+</table>						       			 
+<div data-dojo-attach-point="confirmacionPane" style="display:none;">
+  	<table width="100%" border="0" style="background-color:#1D6EC4;">	 
+  		<tr>
+			<td width="90%" style="font-family:arial;font-size:12px;font-weight:bold;color:white;"><div data-dojo-attach-point="confirmationMessage"></div></td>					
+			<td><button data-dojo-attach-point="confirmarButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onConfirmar">S&iacute;</button></td>
+			<td><button data-dojo-attach-point="cancelarButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onCancelar">No</button></td>		  				  			
+  		</tr>	  				  						  	 					  	
+	</table>	
+</div>	  								 	      												
+	<table width="100%" border="0" style="background-color:#FFFFFF;">
+		<tr>
+			<td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+	</tr>
+</table>

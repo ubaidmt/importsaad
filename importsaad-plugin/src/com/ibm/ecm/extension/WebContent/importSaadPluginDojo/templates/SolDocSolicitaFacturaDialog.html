@@ -1,0 +1,139 @@
+  	<table width="100%" border="0" style="background-color:#FFFFFF;">	 
+  		<tr>
+  			<td width="100%" colspan="2" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Datos Generales:</td>
+		</tr>	  	 					  	
+  		<tr>
+  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Proveedor:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-attach-point="proveedoresDiv"></div></td>
+		</tr>
+	</table>
+	<div data-dojo-attach-point="nombreEmpresaPane" style="display:none;">
+		<table width="100%" border="0" style="background-color:#FFFFFF;">					
+	  		<tr>
+	  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Empresa:</td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-attach-point="empresasDiv"></div></td>	  			
+			</tr>
+			<tr>
+	  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Nueva Empresa:</td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="nuevaEmpresa" value=true data-dojo-props="checked: false"></div></td>
+			</tr>				
+	  		<tr>
+	  			<td width="30%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Nombre de Empresa:</label></td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="empresaNombre" uppercase=true maxlength="64"></div></td>
+			</tr>
+		</table>
+	</div>			
+	<table width="100%" border="0" style="background-color:#FFFFFF;">	 															
+		<tr>
+  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cliente:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-attach-point="clientesDiv"></div></td>
+		</tr>				
+  		<tr>
+  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">RFC:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="rfc"></div></td>
+		</tr>
+  		<tr>
+  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Direcci&oacute;n Fiscal:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="direccionFiscal"></div></td>
+		</tr>																														  				 		
+	</table>	
+	<table width="100%" border="0" style="background-color:#FFFFFF;">	 															
+		<tr>
+  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Empresa Emisora Solicitada (Opcional):</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="empresaSolicitada" uppercase=true maxlength="64"></div></td>
+		</tr>																																	  				 		
+	</table>		
+	<div data-dojo-attach-point="comisionesPane" style="display:none;">
+	  	<table width="100%" border="0" style="background-color:#FFFFFF;">	 
+	  		<tr>
+	  			<td width="100%" colspan="4" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Porcentaje de Comisiones:</td>
+			</tr>	
+	  		<tr>
+	  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Comisi&oacute;n del Proveedor:</label></td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="porcentajeComisionProveedor" value=0 maxlength="6" data-dojo-props="constraints: {max: 100.00, maxString: '100.00', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato del porcentaje de comisión inválido'"></div><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> %</label></td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Monto:</td>
+	  			<td width="30%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="montoComisionProveedor"></div></td>		  				  			
+	  		</tr>
+	  		<tr>
+	  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Comisi&oacute;n del Distribuidor:</label></td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="porcentajeComisionDistribuidor" value=0 maxlength="6" data-dojo-props="constraints: {max: 100.00, maxString: '100.00', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato del porcentaje de comisión inválido'"></div><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> %</label></td>
+	  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Monto:</td>
+	  			<td width="30%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="montoComisionDistribuidor"></div></td>		  				  			
+	  		</tr>		  				  						  	 					  	
+		</table>	
+	</div>				
+	<table width="100%" border="0" style="background-color:#FFFFFF;">
+  		<tr>
+  			<td width="100%" colspan="6" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Detalle de Conceptos:</td>
+		</tr>
+  		<tr>
+	  		<td width="20%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Descripci&oacute;n:</label></td>
+  			<td colspan="5"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="conceptoDescripcion" required=true></div></td>
+  		</tr>
+  		<tr>
+	  		<td width="15%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Unidad:</label></td>
+  			<td width="15%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="conceptoUnidad" required=true></div></td>	  		
+	  		<td width="15%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cantidad:</label></td>
+  			<td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="conceptoCantidad" value=1 required=true maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>
+	  		<td width="15%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Precio Unitario:</label></td>
+  			<td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="conceptoPrecioUnitario" value=0 required=true maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>	  				  			
+  		</tr>		  			  					
+	</table>
+	<table width="100%" border="0" style="background-color:#FFFFFF;">				
+		<tr>
+			<td width="80%"><div></div></td>					
+			<td><button data-dojo-attach-point="addConceptoButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onConceptoAdd">Agregar</button></td>
+			<td><button data-dojo-attach-point="updateConceptoButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onConceptoUpdate">Actualizar</button></td>				
+			<td><button data-dojo-attach-point="deleteConceptoButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onConceptoDelete">Eliminar</button></td>												
+		</tr>
+	</table>			
+	<div data-dojo-type="dijit.layout.ContentPane" region="center" class="paneNoOverflow" splitter="true" style="background-color:#FFFFFF;">	
+		<div data-dojo-attach-point="gridDiv" style="width: 100%;"></div>	
+	</div>
+	<table width="100%" border="0" style="background-color:#FFFFFF;">	
+  		<tr>
+  			<td width="80%"><div></div></td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;">SubTotal:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="subTotal"></div></td
+		</tr>
+  		<tr>
+  			<td width="80%"><div></div></td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;">IVA:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="iva"></div></td>
+		</tr>
+  		<tr>
+  			<td width="80%"><div></div></td>
+  			<td style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Monto Total:</td>
+  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="montoTotal"></div></td>
+		</tr>
+	</table>		
+	<table width="100%" border="0" style="background-color:#FFFFFF;">		
+  		<tr>
+  			<td width="100%" colspan="2" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Observaciones para notificaci&oacute;n al proveedor:</td>
+		</tr>
+  		<tr>
+  			<td width="100%" colspan="2"><div data-dojo-type="dijit.form.Textarea" style="width: 100%;" data-dojo-attach-point="observaciones" maxlength="1000" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div></td>
+		</tr>	
+	</table>							
+	<table width="100%" border="0" style="background-color:#FFFFFF;">				
+  		<tr>
+  			<td width="30%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">N&uacute;mero de facturas (1-20):</td>
+  			<td width="10%"><div data-dojo-type="dijit.form.NumberSpinner" style="width: 70px;" data-dojo-attach-point="numeroCopias" value="1" data-dojo-props="smallDelta:1, constraints:{min:1,max:20,places:0}"></div></td>
+  			<td width="30%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Omitir notificaci&oacute;n </td>
+  			<td><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="omitirEnvioCorreo" value=true data-dojo-props="checked: false"></td>	  				  
+		</tr>
+	</table>	
+	<div data-dojo-attach-point="confirmacionPane" style="display:none;">
+	  	<table width="100%" border="0" style="background-color:#1D6EC4;">	 
+	  		<tr>
+				<td width="90%" style="font-family:arial;font-size:12px;font-weight:bold;color:white;">¿Est&aacute; seguro de solicitar la(s) factura(s) con los datos ingresados?</td>					
+				<td><button data-dojo-attach-point="confirmarButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onConfirmar">S&iacute;</button></td>
+				<td><button data-dojo-attach-point="cancelarButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onCancelar">No</button></td>		  				  			
+	  		</tr>	  				  						  	 					  	
+		</table>	
+	</div>							
+  	<table width="100%" border="0" style="background-color:#FFFFFF;">
+  		<tr>
+  			<td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#000253;float:left;"></div></td>
+		</tr>
+	</table>				

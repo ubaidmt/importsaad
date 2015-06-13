@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="ImportSaadPlugin" default="all" basedir=".">
+
+	<property name="J2EE_IBM" value="/opt/IBM/WebSphere/Liberty/dev/api/ibm" />
+	<property name="J2EE_SPEC" value="/opt/IBM/WebSphere/Liberty/dev/api/spec" />
+	<property name="RESOURCES_HOME" value="/opt/resources/lib" />	
+	
+	<target name="all" depends="clean,compile,jar" />
+	
+	<path id="classpath">
+		<fileset id="j2ee_ibm.jars" dir="${J2EE_IBM}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset id="j2ee_spec.jars" dir="${J2EE_SPEC}">
+			<include name="**/*.jar" />
+		</fileset>		
+		<fileset id="res.jars" dir="${RESOURCES_HOME}">
+			<include name="**/*.jar" />
+		</fileset>	
+	</path>	
+
+	<target name="clean">
+		<delete dir="temp" />
+	</target>
+	
+	<target name="compile">
+		<mkdir dir="temp"/>
+		<javac srcdir="src" destdir="temp" source="1.5" target="1.5" debug="true">
+			<classpath refid="classpath" />
+			<include name="**/*.java" />
+		</javac>
+	</target>
+	
+	<target name="jar">
+		<copy todir="temp" >
+			<fileset dir="src">
+				<include name="**/WebContent/**" />
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+		<jar jarfile="/opt/resources/importsaad/plugins/importsaad-plugin.jar" >
+			<fileset dir="./temp" includes="**/*" />
+			<manifest>
+				<attribute name="Plugin-Class" value="com.ibm.ecm.extension.ImportSaadPlugin" />
+				<section name="build">
+					<attribute name="Built-By" value="${user.name}" />
+					<attribute name="Build" value="${TODAY}" />
+				</section>
+			</manifest>
+		</jar>
+		<delete dir="./temp" />
+	</target>
+	
+</project>

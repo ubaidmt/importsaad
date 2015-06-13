@@ -1,0 +1,18 @@
+.reportesLaunchIcon {
+	width: 32px;
+	height: 32px;
+	background-position: -208px -16px;
+}
+
+.reportesLaunchIcon,
+.launchBarButton.dijitChecked .reportesLaunchIcon, 
+.launchBarButton.dijitFocused .reportesLaunchIcon { 
+	background-image: url('images/importSaadPlugin.svg');
+	background-repeat: no-repeat;
+}
+
+.ecmLaunchBarContainer .launchBarButton.dijitToggleButtonHover .reportesLaunchIcon,
+.launchBarButton.dijitChecked .reportesLaunchIcon, 
+.launchBarButton.dijitFocused .reportesLaunchIcon { background-position:-208px -80px; }
+
+

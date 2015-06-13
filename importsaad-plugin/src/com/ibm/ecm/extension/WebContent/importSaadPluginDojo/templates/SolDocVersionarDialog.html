@@ -1,0 +1,47 @@
+<div class="popupDialog dijitDialog" style="width: 700px;" role="dialog" aria-labelledby="${id}_title">
+	<div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+		<span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title"><b>Actualizaci&oacute;n de Documento</b></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+		</span>
+	</div>
+	<div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">	
+		<table width="100%" border="0" style="background-color:#F7F6F6;">
+	  		<tr>
+	  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Archivo del documento</td>
+			</tr>
+		</table>
+		<table width="100%" border="0" style="background-color:#F7F6F6;">				
+			<tr>
+				<td width="90%">
+					<form data-dojo-attach-point="_fileInputForm"
+						name="fileUploadForm"
+						enctype="multipart/form-data"
+						accept-charset="UTF-8"
+						method="post"
+						target="${id}_fileInputIFrame">
+						<input type="file"
+							id="${id}_fileInput"
+							name="uploadFile"
+							class="fileInput"
+							data-dojo-attach-point="_fileInput"
+							data-dojo-attach-event="onchange: onFileInputChange"/>
+						<iframe name="${id}_fileInputIFrame"
+							id="${id}_fileInputIFrame"
+							style="display: none">
+						</iframe>
+					</form>				
+				</td>														
+			</tr>			
+		</table>	
+	  	<table width="100%" border="0" style="background-color:#F7F6F6;">
+	  		<tr>
+	  			<td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#000253;float:left;"></div></td>
+			</tr>
+		</table>			
+		<div data-dojo-attach-point="actionBar" class="dijitDialogPaneActionBar">
+			<button data-dojo-attach-point="saveButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onSave">Actualizar</button>
+			<button data-dojo-attach-point="cancelButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onCancel">Cancelar</button>				
+		</div>
+	</div>
+</div>

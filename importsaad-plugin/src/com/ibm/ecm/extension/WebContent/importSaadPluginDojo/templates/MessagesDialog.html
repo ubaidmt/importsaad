@@ -1,0 +1,20 @@
+<div class="messagesDialog dijitDialog" role="dialog" aria-labelledby="${id}_title">
+	<div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+		<div data-dojo-attach-point="msgDialogTitle" class="dijitDialogTitle" id="${id}_title">Mensaje de Informaci&oacute;n</div>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+		</span>
+	</div>
+	
+	<div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+		<table id="msgDialogTable" width="500">	
+			<tr>
+				<td width="5px" style="vertical-align: top;"><div data-dojo-attach-point="msgDialogImage"></div></td>
+				<td style="vertical-align: top;"><div data-dojo-attach-point="msgDialogInfo"></div></td>
+			</tr>								
+		</table> 		
+		<div data-dojo-attach-point="actionBar" class="dijitDialogPaneActionBar">
+			<button data-dojo-attach-point="closeButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onCancel">Cerrar</button>
+		</div>
+	</div>
+</div>
