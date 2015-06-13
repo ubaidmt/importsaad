@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="importsaad-services">
+        <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
+        <dependent-module archiveName="importsaad-eds.war" deploy-path="/" handle="module:/resource/importsaad-eds/importsaad-eds">
+            <dependent-object>Module_1392168744338</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="importsaad-cdn.war" deploy-path="/" handle="module:/resource/importsaad-cdn/importsaad-cdn">
+            <dependent-object>Module_1392168745258</dependent-object>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
