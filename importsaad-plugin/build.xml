@@ -3,7 +3,7 @@
 
 	<property name="J2EE_IBM" value="/opt/IBM/WebSphere/Liberty/dev/api/ibm" />
 	<property name="J2EE_SPEC" value="/opt/IBM/WebSphere/Liberty/dev/api/spec" />
-	<property name="RESOURCES_HOME" value="/opt/resources/lib" />	
+	<property name="RESOURCES_HOME" value="/Users/juansaad/git/excelecm/excelecm-resources/lib" />	
 	
 	<target name="all" depends="clean,compile,jar" />
 	
