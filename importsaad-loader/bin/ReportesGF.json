@@ -19,12 +19,12 @@
 		{ 
 		"nombre": "FechaSolicitudDesde",
 		"valor": "paramFechaSolicitudDesde",
-		"requerido": false
+		"requerido": true
 		},	
 		{ 
 		"nombre": "FechaSolicitudHasta",
 		"valor": "paramFechaSolicitudHasta",
-		"requerido": false
+		"requerido": true
 		},					
 		{ 
 		"nombre": "FechaFacturaDesde",
@@ -145,12 +145,12 @@
 		{ 
 		"nombre": "FechaSolicitudDesde",
 		"valor": "paramFechaSolicitudDesde",
-		"requerido": false
+		"requerido": true
 		},	
 		{ 
 		"nombre": "FechaSolicitudHasta",
 		"valor": "paramFechaSolicitudHasta",
-		"requerido": false
+		"requerido": true
 		},					
 		{ 
 		"nombre": "FechaPagoDesde",
@@ -256,12 +256,12 @@
 		{ 
 		"nombre": "FechaSolicitudDesde",
 		"valor": "paramFechaSolicitudDesde",
-		"requerido": false
+		"requerido": true
 		},	
 		{ 
 		"nombre": "FechaSolicitudHasta",
 		"valor": "paramFechaSolicitudHasta",
-		"requerido": false
+		"requerido": true
 		},						
 		{ 
 		"nombre": "ImporteDesde",

@@ -776,6 +776,12 @@ function(declare,
 				return;
 			}
 			
+			// Valida que la diferencia de dias entre fechas de creacion no sea mayor a 1 mes
+			if (!this.isMaxDateRangeValid(this.paramFechaSolicitudDesde, this.paramFechaSolicitudHasta, 30)) {
+				html.set(this.message, "El rango establecido en las fechas de registro inicial y final debe de ser menor o igual a 30 días naturales.");
+				return;				
+			}			
+			
 			// Set mensaje estatus
 			this.setReporteProgreso(true);
 			this.message.innerHTML = "Generando Reporte...";
@@ -836,6 +842,37 @@ function(declare,
 			}), 1000);
 			
 			this.logExit("doReporte");
-		}
+		},
+		
+		isMaxDateRangeValid: function(dateWidget1, dateWidget2, maxDaysDiff) {
+			var strDate = dateWidget1.getValue();
+			var out = "";
+			if (strDate.length >= 10) {
+				out += strDate.substring(5,7);
+				out += "/" + strDate.substring(8,10);
+				out += "/" + strDate.substring(0,4);
+			}
+			var date1 = new Date(out);
+
+			strDate = dateWidget2.getValue();
+			out = "";
+			if (strDate.length >= 10) {
+				out += strDate.substring(5,7);
+				out += "/" + strDate.substring(8,10);
+				out += "/" + strDate.substring(0,4);
+			}
+			var date2 = new Date(out);
+			
+			if (maxDaysDiff > this.daysDiff(date1, date2))
+				return true;
+			else
+				return false;
+		},
+		
+		daysDiff: function(date1, date2) {
+			var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+			var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+			return diffDays;			
+		}		
 	});
 });
