@@ -51,7 +51,7 @@ define([
 		
 		showDialog: function() {
 			this.onLoad();
-			this.startTicker(600000); // 10 minutes		
+			//this.startTicker(600000); // 10 minutes		
 			this.inherited("show", []);		
 		},
 
