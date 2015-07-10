@@ -1,0 +1,61 @@
+<div data-dojo-type="dijit.layout.ContentPane">
+    <div data-dojo-type="dijit.layout.ContentPane" style="width:100%;height:5%;">
+        <table style="width: 100%;background-color:#FFFFFF;">
+            <tr>
+                <td style="width: 100%;" align="right"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="filtro" placeholder="filtro por proveedor" style="border: 1px solid #848484; -webkit-border-radius: 30px; -moz-border-radius: 30px; border-radius: 30px; outline:0; padding-left:10px; padding-right:10px;" maxlength="64"></div></td>
+            </tr>	
+        </table>	
+    </div>
+    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="gridArea" style="width:100%;height:45%;">
+		<div data-dojo-attach-point="gridDiv" style="width: 100%;"></div>	
+	</div>	
+    <br>
+    <div data-dojo-type="dijit.layout.ContentPane" style="width:100%;height:40%;">
+        <table style="width: 100%;background-color:#FFFFFF;">
+            <tr>
+                <td colspan="2" style="width: 100%;font-family:arial;font-size:12px;font-weight:bold;color:black;">Datos Generales</td>
+            </tr>		  	
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Nombre de Proveedor:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 80%;" data-dojo-attach-point="name" required="true" uppercase="true" maxlength="60"></div></td>
+            </tr>
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Activo:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="activo" value="true" data-dojo-props="checked: true"></div></td>
+            </tr>           
+            <tr>
+                <td colspan="2" style="width: 100%;font-family:arial;font-size:12px;font-weight:bold;color:black;">Datos adicionales</td>
+            </tr>		  	            
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Direcci&oacute;n:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 80%;" data-dojo-attach-point="direccion" required="true" ></div></td>
+            </tr> 
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Tax ID:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 80%;" data-dojo-attach-point="taxID" required="true" ></div></td>
+            </tr>             
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Tel&eacute;fono:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 80%;" data-dojo-attach-point="telefono"></div></td>
+            </tr>                       
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Fax:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 80%;" data-dojo-attach-point="fax"></div></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;font-family:arial;font-size:12px;font-weight:bold;color:black;">Plantillas</td>
+            </tr>		  	            
+            <tr>
+                <td style="width: 40%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Factura Comercial:</label></td>
+                <td style="width: 60%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 80%;" data-dojo-attach-point="plantilla_1"></div></td>
+            </tr>             
+        </table>
+    </div>        
+    <div data-dojo-type="dijit.layout.ContentPane" style="width:100%;height:5%;">    
+        <table style="width: 100%;background-color:#FFFFFF;">
+            <tr>
+                <td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+            </tr>
+        </table>
+    </div>
+</div>

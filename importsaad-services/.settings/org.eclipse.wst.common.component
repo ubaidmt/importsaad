@@ -5,8 +5,8 @@
             <dependent-object>Module_1392168744338</dependent-object>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="importsaad-cdn.war" deploy-path="/" handle="module:/resource/importsaad-cdn/importsaad-cdn">
-            <dependent-object>Module_1392168745258</dependent-object>
+        <dependent-module archiveName="importsaad-mobile.war" deploy-path="/" handle="module:/resource/importsaad-mobile/importsaad-mobile">
+            <dependent-object>Module_1466538094548</dependent-object>
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

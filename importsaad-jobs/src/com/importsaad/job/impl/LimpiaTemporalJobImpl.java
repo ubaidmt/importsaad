@@ -51,7 +51,7 @@ public class LimpiaTemporalJobImpl {
 		    
 		    sql.setWhereClause(sb.toString());	
 		    
-		    IndependentObjectSet objSet = search.fetchObjects(sql, 50, null, true);
+		    IndependentObjectSet objSet = search.fetchObjects(sql, null, null, true);
     		
     		for (Iterator<Document> it = objSet.iterator(); it.hasNext(); ) 
     		{

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!-- prevent cache (remove for production) -->
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="pragma" content="no-cache">
+	<title>Import-Saad Mobile</title>
+	<!-- application stylesheet -->
+	<link rel="stylesheet" type="text/css" href="css/contenedores.css">
+    <link rel="stylesheet" type="text/css" href="css/forms.css">
+    <link rel="stylesheet" type="text/css" href="css/buttons.css">
+	<link rel="stylesheet" type="text/css" href="css/scrollablepanes.css">
+	<!-- dynamically apply native visual theme according to the browser user agent -->
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojox/mobile/deviceTheme.js"></script>
+	<!-- dojo configuration options -->
+	<script type="text/javascript">
+		dojoConfig = {
+			async: true,
+			baseUrl: './',
+			parseOnLoad: false,
+			mblHideAddressBar: true,
+			extraLocale: ["es-mx"],
+			packages: [{
+				name: "view",
+				location: "js/view"
+			}]
+		};
+	</script>
+	<!-- dojo bootstrap -->
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"></script>
+	<!-- dojo application code -->
+	<script>
+		// Load the widget parser and mobile base
+		require([
+			"dojox/mobile/parser",
+			"dijit/registry",
+            "dijit/form/DataList",
+			"dojox/mobile/compat",
+			"dojo/domReady!",
+			"dojox/mobile/ScrollableView",
+			"dojox/mobile/ScrollablePane",
+			"dojox/mobile/ListItem",
+			"dojox/mobile/FormLayout",
+			"dojox/mobile/TextBox",
+            "dojox/mobile/Switch",
+			"dojox/mobile/RadioButton",
+			"dojox/mobile/Heading",
+			"dojox/mobile/EdgeToEdgeList",
+			"dojox/mobile/RoundRect",
+			"view/MainView",
+            "view/ContenedoresSettingsView",
+			"view/CotizadorView",
+            "view/CotizadorSettingsView",
+            "view/FraccionesView",
+            "view/ClientesView",
+            "view/NavierasView",
+            "view/ForwardersView"
+		], function (parser, registry) {
+			// global objects
+            settings = {};
+			// init query
+			settings.critero = {
+				name: null,
+                cliente: null,
+                pedimento: null,
+                creaciondesde: null,
+                creacionhasta: null,
+                basedesde: null,
+                basehasta: null,
+                naviera: null,
+                forwarder: null,
+                estado: null,
+                semaforo: null,
+                maxResults: 50
+			};            
+			// Parse the page for widgets
+			parser.parse();
+		});
+	</script>
+</head>
+<body style="visibility:hidden;">
+<!-- Main View -->
+<div id="mainView" data-dojo-type="view/MainView" data-dojo-props="selected: true">
+	<div id="mainViewHeading" style="text-overflow: ellipsis; text-align:  "
+		 data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Contenedores'">
+					<span data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/settings.png', moveTo:'contenedoresSettingsView', transitionDir:'-1', transition:'none'"
+						  style="float:left;"></span>        
+					<span data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/currency.png', moveTo:'cotizadorView', transitionDir:'-1', transition:'flip'"
+						  style="float:left;"></span>							  			  
+					<span id="reloadContenedoresButton" data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/refresh.png'"
+						  style="float:right;"></span>
+	</div>
+	<div id="contenedoresList" data-dojo-type="dojox/mobile/EdgeToEdgeList">
+	</div>
+</div>
+<!-- Contenedores settings view -->
+<div id="contenedoresSettingsView" data-dojo-type="view/ContenedoresSettingsView">
+	<div data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Criterios'">
+			  <span id="doneContenedoresButton" data-dojo-type="dojox/mobile/ToolBarButton"
+					data-dojo-props="label:'Contenedores', moveTo:'mainView', transition:'none'" style="float:right;"></span>
+	</div>
+	<div data-dojo-type="dojox/mobile/RoundRect">
+		<div data-dojo-type="dojox/mobile/FormLayout"
+			 data-dojo-props="columns:'two'">
+			<div>
+				<label for="name">Contenedor</label>
+				<fieldset>
+					<input type="text" id="name" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', uppercase: true">
+				</fieldset>                
+			</div>
+			<div>
+				<label for="cliente">Cliente</label>
+				<fieldset>
+                    <span data-dojo-type="dojox/mobile/ToolBarButton" id="selectClienteButton" data-dojo-props="icon: 'images/search.png'" style="float:left;"></span><div id="cliente" style="font-size: 0.7em;font-weight: normal;float: left;"></div>
+				</fieldset>   
+			</div>
+			<div>
+				<label for="naviera">Naviera</label>
+				<fieldset>
+					<span data-dojo-type="dojox/mobile/ToolBarButton" id="selectNavieraButton" data-dojo-props="icon: 'images/search.png'" style="float:left;"></span><div id="naviera" style="font-size: 0.7em;font-weight: normal;float: left;"></div>
+				</fieldset>   
+			</div>  
+			<div>
+				<label for="forwarder">Forwarder</label>
+				<fieldset>
+					<span data-dojo-type="dojox/mobile/ToolBarButton" id="selectForwarderButton" data-dojo-props="icon: 'images/search.png'" style="float:left;"></span><div id="forwarder" style="font-size: 0.7em;font-weight: normal;float: left;"></div>
+				</fieldset>   
+			</div>   
+			<div>
+				<label>Etapa</label>
+				<fieldset>
+					<input id="estadoAll" data-dojo-type="dojox/mobile/RadioButton" checked type="radio" name="estado" value="ALL"><label style="font-size: 0.7em;font-weight: normal;">TODOS</label><br />
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="X"><label style="font-size: 0.7em;font-weight: normal;">EN PROGRESO</label><br />					   
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="0"><label style="font-size: 0.7em;font-weight: normal;">EN TRASLADO MARITIMO</label><br />					   						   
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="1"><label style="font-size: 0.7em;font-weight: normal;">EN PUERTO</label><br />					   						   
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="2"><label style="font-size: 0.7em;font-weight: normal;">EN TRASLADO TERRESTRE</label><br />					   						                       
+                    <input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="3"><label style="font-size: 0.7em;font-weight: normal;">EN ALMACEN LOCAL</label><br />					   						                       
+                    <input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="4"><label style="font-size: 0.7em;font-weight: normal;">EN ENTREGA A CLIENTE</label><br />					   						                       
+                    <input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="5"><label style="font-size: 0.7em;font-weight: normal;">EN RETORNO DE VACIO</label><br />					   						                       
+                    <input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="estado" value="99"><label style="font-size: 0.7em;font-weight: normal;">CONCLUIDO</label><br />					   						                       
+				</fieldset>
+			</div>
+			<div>
+				<label>Sem&aacute;foro</label>
+				<fieldset>
+					<input id="semaforoAll" data-dojo-type="dojox/mobile/RadioButton" checked type="radio" name="semaforo" value="ALL"><label style="font-size: 0.7em;font-weight: normal;">TODOS</label><br />
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="semaforo" value="0"><label style="font-size: 0.7em;font-weight: normal;">VERDE</label><br />					   
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="semaforo" value="1"><label style="font-size: 0.7em;font-weight: normal;">AMBAR</label><br />					   						   
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="semaforo" value="2"><label style="font-size: 0.7em;font-weight: normal;">ROJO</label><br />					   						   
+					<input data-dojo-type="dojox/mobile/RadioButton" type="radio" name="semaforo" value="X"><label style="font-size: 0.7em;font-weight: normal;">ALERTADOS</label><br />					   						                       
+				</fieldset>
+			</div>                                 
+			<div>
+				<label for="maxResults" class="generalLabel">Max Results</label>
+				<fieldset>
+					<input type="text" id="maxResults" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'50', maxlength:'4'">
+				</fieldset>		
+			</div>                  
+		</div>
+        <div>
+            <button id="resetSettingsButton" data-dojo-type="dojox/mobile/Button" class="baseBtn glossy navyBtn" style="width: 100px;">Limpiar</button>
+        </div>          
+	</div>
+</div>    
+<!-- Cotizador View -->
+<div id="cotizadorView" data-dojo-type="view/CotizadorView">
+	<div id="cotizadorViewHeading" style="text-overflow: ellipsis; text-align:  "
+         data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Cotizador'">
+			  <span id="doneCotizadorButton" data-dojo-type="dojox/mobile/ToolBarButton"
+					data-dojo-props="label:'Contenedores', moveTo:'mainView', transition:'flip'" style="float:right;"></span>
+	</div>
+	<div data-dojo-type="dojox/mobile/RoundRect">
+		<div data-dojo-type="dojox/mobile/FormLayout"
+			 data-dojo-props="columns:'two'">	
+			<div>
+				<label for="fraccion" class="generalLabel">Fracci&oacute;n</label>
+				<fieldset>
+                    <span data-dojo-type="dojox/mobile/ToolBarButton" id="selectFraccionButton" data-dojo-props="icon: 'images/search.png'" style="float:left;"></span><div id="fraccion" style="font-size: 0.7em;font-weight: normal;float: left;"></div>
+				</fieldset>						
+			</div>
+			<div>
+				<label for="aumento" class="generalLabel">Aumento</label>
+				<fieldset>
+					<input type="text" id="aumento" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'0', maxlength:'5'">
+				</fieldset>		
+			</div>            
+			<div>
+				<label for="ancho" class="generalLabel">Ancho</label>
+				<fieldset>
+					<input type="text" id="ancho" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'1', maxlength:'5'">
+				</fieldset>		
+			</div>
+			<div>
+				<label for="select" class="generalLabel">Medida</label>
+				<fieldset>
+					<input type="checkbox" id="metros" data-dojo-type="dojox/mobile/Switch" value="on" leftLabel="M" rightLabel="IN">
+				</fieldset>
+			</div>            
+			<div>
+				<label for="cantidad" class="generalLabel">Cantidad</label>
+				<fieldset>
+					<input type="text" id="cantidad" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'1', maxlength:'8'">
+				</fieldset>		
+			</div>            
+			<div>
+				<label for="flete" class="generalLabel">Flete</label>
+				<fieldset>
+					<input type="text" id="flete" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'0', maxlength:'8'">
+				</fieldset>		
+			</div>                        
+			<div>
+				<label for="tipoCambio" class="generalLabel">TC</label>
+				<fieldset>
+					<input type="text" id="tipoCambio" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'0', maxlength:'8'">
+				</fieldset>		
+			</div>          
+			<div>
+				<label for="incremento" class="generalLabel">Incremento</label>
+				<fieldset>
+					<input type="text" id="incremento" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'0', maxlength:'8'">
+				</fieldset>		
+			</div>                      
+		</div>
+        <div>
+            <button id="cleanDatosCotizacionButton" data-dojo-type="dojox/mobile/Button" class="baseBtn glossy navyBtn" style="width: 100px;">Limpiar</button>
+            <button id="settingsCotizacionButton" data-dojo-type="dojox/mobile/Button" class="baseBtn glossy navyBtn" style="width: 120px;">Configurar</button>
+        </div>
+		<div style="margin:25px auto; position:relative;">
+            <ul id="cotizacionList" data-dojo-type="dojox/mobile/RoundRectList" class="list1ScrollPane" data-dojo-props="stateful:true" selected="true">
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">MIN</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>											
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">UNI</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>											                    
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">USD</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>															
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">ADU</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>					
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">IGI</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>					
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">DTA</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>					
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">IVA</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>					
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">PREV</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>																									
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">CNT</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>											
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">IMP</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>											                    
+                <li data-dojo-type="dojox/mobile/ListItem">
+                    <div data-mobile-layout="left" class="c1ScrollPane">COT</div>
+                    <div data-mobile-layout="right" class="c3ScrollPane c3aScrollPane">$ 0.00</div>
+                </li>											                                        
+            </ul>
+		</div>				
+	</div>
+</div>
+<!-- Cotizador Settings view -->
+<div id="cotizadorSettingsView" data-dojo-type="view/CotizadorSettingsView">
+	<div data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Configuración'">
+            <span id="restoreCotizadorSettingsButton" data-dojo-type="dojox/mobile/ToolBarButton"
+                  data-dojo-props="icon: 'images/refresh.png'" style="float:left;"></span>                
+			  <span id="doneCotizadorSettingsButton" data-dojo-type="dojox/mobile/ToolBarButton"
+					data-dojo-props="label:'Ok', moveTo:'cotizadorView', transition:'none'" style="float:right;"></span>
+	</div>
+	<div data-dojo-type="dojox/mobile/RoundRect">
+		<div data-dojo-type="dojox/mobile/FormLayout"
+			 data-dojo-props="columns:'two'">
+			<div>
+				<label for="stnPteIVA" class="generalLabel">IVA</label>
+				<fieldset>
+					<input type="text" id="stnPteIVA" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', maxlength:'5'">
+				</fieldset>
+			</div>
+			<div>
+				<label for="stnTC" class="generalLabel">TC</label>
+				<fieldset>
+					<input type="text" id="stnTC" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', maxlength:'5'">
+				</fieldset>
+			</div>            
+			<div>
+				<label for="stnIGI" class="generalLabel">IGI</label>
+				<fieldset>
+					<input type="text" id="stnIGI" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', maxlength:'5'">
+				</fieldset>
+			</div>            
+			<div>
+				<label for="stnDTA" class="generalLabel">DTA</label>
+				<fieldset>
+					<input type="text" id="stnDTA" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', maxlength:'5'">
+				</fieldset>
+			</div>            
+			<div>
+				<label for="stnPREV" class="generalLabel">PREV</label>
+				<fieldset>
+					<input type="text" id="stnPREV" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', maxlength:'5'">
+				</fieldset>
+			</div>            
+			<div>
+				<label for="stnCNT" class="generalLabel">CNT</label>
+				<fieldset>
+					<input type="text" id="stnCNT" data-dojo-type="dojox/mobile/TextBox" data-dojo-props="value:'', maxlength:'5'">
+				</fieldset>
+			</div>                        
+		</div>
+	</div>
+</div>    
+<!-- Fracciones View -->
+<div id="fraccionesView" data-dojo-type="view/FraccionesView">
+	<div id="fraccionesHeading" data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Fracciones'">
+					<span id="reloadFraccionesButton" data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/refresh.png'"
+						  style="float:left;"></span>        
+					<span data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="label: 'Cotizador', moveTo:'cotizadorView', transition:'slide'"
+						  style="float:right;"></span>		 		 
+	</div>
+    <input data-dojo-type="dojox/mobile/SearchBox" type="search" id="fraccionesFilterBox" queryExpr="*${0}*">
+    <div id="fraccionesList" data-dojo-type="dojox/mobile/ScrollableView"></div>
+</div>
+<!-- Clientes View -->
+<div id="clientesView" data-dojo-type="view/ClientesView">
+	<div id="clientesHeading" data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Clientes'">
+					<span id="reloadClientesButton" data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/refresh.png'"
+						  style="float:left;"></span>        
+					<span data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="label: 'Criterios', moveTo:'contenedoresSettingsView', transition:'slide'"
+						  style="float:right;"></span>		 		 
+	</div>
+    <input data-dojo-type="dojox/mobile/SearchBox" type="search" id="clientesFilterBox" queryExpr="*${0}*">
+    <div id="clientesList" data-dojo-type="dojox/mobile/ScrollableView"></div>
+</div> 
+<!-- Navieras View -->
+<div id="navierasView" data-dojo-type="view/NavierasView">
+	<div id="navierasHeading" data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Navieras'">
+					<span id="reloadNavierasButton" data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/refresh.png'"
+						  style="float:left;"></span>        
+					<span data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="label: 'Criterios', moveTo:'contenedoresSettingsView', transition:'slide'"
+						  style="float:right;"></span>		 		 
+	</div>
+    <input data-dojo-type="dojox/mobile/SearchBox" type="search" id="navierasFilterBox" queryExpr="*${0}*">
+    <div id="navierasList" data-dojo-type="dojox/mobile/ScrollableView"></div>
+</div> 
+<!-- Forwarders View -->
+<div id="forwardersView" data-dojo-type="view/ForwardersView">
+	<div id="forwardersHeading" data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Forwarders'">
+					<span id="reloadForwardersButton" data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="icon: 'images/refresh.png'"
+						  style="float:left;"></span>        
+					<span data-dojo-type="dojox/mobile/ToolBarButton"
+						  data-dojo-props="label: 'Criterios', moveTo:'contenedoresSettingsView', transition:'slide'"
+						  style="float:right;"></span>		 		 
+	</div>
+    <input data-dojo-type="dojox/mobile/SearchBox" type="search" id="forwardersFilterBox" queryExpr="*${0}*">
+    <div id="forwardersList" data-dojo-type="dojox/mobile/ScrollableView"></div>
+</div>     
+<!-- Detalle de contenedor view -->
+<div id="details" data-dojo-type="dojox/mobile/ScrollableView">
+	<div id="detailsHeading" data-dojo-type="dojox/mobile/Heading"
+		 data-dojo-props="fixed: 'top', label: 'Detalle de Contenedor', back:'Atrás', moveTo:'mainView', transition:'slide', transitionDir:'-1'">
+	</div>
+	<div id="detailsContainer" data-dojo-type="dojox/mobile/RoundRect" style="background-color:#ffffff;">
+	</div>
+</div>
+</body>
+</html>

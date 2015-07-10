@@ -38,7 +38,7 @@ public class LimpiaUnfiledJobImpl {
 		    SearchScope search = new SearchScope(ceService.getOS(getOsName()));
 		    SearchSQL sql = new SearchSQL(sqlStatement.toString());
 		    
-		    IndependentObjectSet objSet = search.fetchObjects(sql, 50, null, true);
+		    IndependentObjectSet objSet = search.fetchObjects(sql, null, null, true);
     		
     		for (Iterator<Document> it = objSet.iterator(); it.hasNext(); ) 
     		{

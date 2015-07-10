@@ -1,0 +1,146 @@
+<div data-dojo-type="dijit.layout.ContentPane">
+    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="gridArea" style="width:100%;height:15%;">
+		<div data-dojo-attach-point="gridDiv" style="width: 100%;"></div>	
+	</div>
+    <br>			
+    <table style="width: 100%;">
+        <tr>
+            <td width="1%"><button data-dojo-attach-point="addCotizacionButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onAdd">Agregar</button></td>
+            <td width="1%"><button data-dojo-attach-point="updateCotizacionButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onUpdate">Actualizar</button></td>
+            <td width="1%"><button data-dojo-attach-point="deleteCotizacionButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDelete">Eliminar</button></td>
+            <td width="1%"><button data-dojo-attach-point="cleanCotizacionButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onClean">Limpiar</button></td>
+            <td width="97%"><div></div></td>
+        </tr>
+    </table>    
+    <br>    
+    <div data-dojo-type="dijit.layout.ContentPane">
+        <table style="width: 100%;border-collapse: collapse;">
+            <tr>
+                <td colspan="2" style="width:30%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Datos de la fracci&oacute;n cotizada</td>
+                <td colspan="3" style="width:35%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Resumen de la fracci&oacute;n cotizada</td>
+                <td colspan="3" style="width:35%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Resumen total de la cotizaci&oacute;n</td>
+            </tr>		  	
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Fracci&oacute;n:</label></td>
+                <td style="width: 15%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100px;float:left;" data-dojo-attach-point="fraccion" required="true" maxlength="10" data-dojo-props="regExp:'^[0-9.]*$', invalidMessage:'Formato Inválido.'" disabled="true"></div><div data-dojo-attach-point="searchIcon" class="searchIcon" title="b&uacute;squeda de fracciones arancelarias" style="float:left;"></div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Precio M&iacute;nimo (USD):</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="precioMinimo">$ 0.00</div></td>                                        
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Aumento (USD):</label></td>
+                <td style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="aumento" required="true" value="0" maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Precio Unitario (USD):</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="precioUnitario">$ 0.00</div></td>                                        
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cantidad:</label></td>
+                <td style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="cantidad" required="true" value="1" maxlength="15" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 1, minString: '1.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cantidad Ajustada:</label></td>
+                <td colspan="2" style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="cantidadAjustada">0.00</div></td>                                  
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cantidad:</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="cantidadtotal">0.00</div></td>        
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="cantidadtotal_final">0.00</div></td>                
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Ancho:</label></td>
+                <td style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;float:left;" data-dojo-attach-point="ancho" required="true" value="1" maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 1, minString: '1.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'" disabled="true"></div><input type="radio" data-dojo-type="ecm.widget.RadioButton" style="float:left;" data-dojo-attach-point="medida" name="medida" id="medidaMetros" value="m" data-dojo-props="checked: true" disabled="true" /><label style="width: 15px;float:left;font-family:arial;font-size:12px;font-weight:normal;color:black;">m</label><input type="radio" data-dojo-type="ecm.widget.RadioButton" style="float:left;" data-dojo-attach-point="medida" name="medida" id="medidaPulgadas" value="in" disabled="true" /><label style="float:left;font-family:arial;font-size:12px;font-weight:normal;color:black;">in</label></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Total (USD):</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="total_fraccion">$ 0.00</div></td>                                        
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="total_fraccion_final">$ 0.00</div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Total (USD):</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="total">$ 0.00</div></td>        
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="total_final">$ 0.00</div></td>
+            </tr>            
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">% Ajuste Final:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;" data-dojo-attach-point="ajuste" required="true" value="0" maxlength="5" data-dojo-props="constraints: {max: 100.00, maxString: '100.00', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Valor Aduanal:</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="valorAduanal">$ 0.00</div></td>                  
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="valorAduanal_final">$ 0.00</div></td>         
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Observaciones (HTML):</label></td>
+                <td colspan="3" style="width: 45%;"><div data-dojo-type="dijit.form.Textarea" style="width: 100%;font-family:arial;font-size:13px;font-weight:normal;color:black;" data-dojo-attach-point="observaciones_fraccion" maxlength="500" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>                
+            </tr>             
+            <tr>
+                <td colspan="8" style="width: 100%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Datos de la cotizaci&oacute;n general</td>                
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Tipo de Cambio:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="tipoCambio" required="true" value="1" maxlength="8" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 1, minString: '1.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                
+                <td style="width: 15%;border-top: 1px solid #14469C;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">IGI:</label></td>
+                <td style="width: 10%;border-top: 1px solid #14469C;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="IGI">$ 0.00</div></td>       
+                <td style="width: 10%;border-top: 1px solid #14469C;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="IGI_final">$ 0.00</div></td>                    
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Flete (USD):</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="flete" required="true" value="0" maxlength="15" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>  
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">DTA:</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="DTA">$ 0.00</div></td>       
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="DTA_final">$ 0.00</div></td>                          
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Incremento:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="incremento" required="true" value="0" maxlength="15" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">IVA:</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="IVA">$ 0.00</div></td>       
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="IVA_final">$ 0.00</div></td>                          
+            </tr>            
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cliente:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-attach-point="clientesDiv"></div></td>                                               
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">PREV:</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="PREV">$ 0.00</div></td>       
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="PREV_final">$ 0.00</div></td>                         
+            </tr>	            
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Referencia:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 150px;float:left;" data-dojo-attach-point="referencia" uppercase="true" required="true" maxlength="30"></div></td>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">CNT:</label></td>
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="CNT">$ 0.00</div></td>       
+                <td style="width: 10%;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="CNT_final">$ 0.00</div></td>                           
+            </tr>
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Contenedor:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 150px;float:left;" data-dojo-attach-point="contenedor" required="false" uppercase="true" maxlength="30"></div></td>
+                <td style="width: 15%;border-top: 1px solid #14469C;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Total Impuestos:</label></td>
+                <td style="width: 10%;border-top: 1px solid #14469C;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="totalImpuestos">$ 0.00</div></td>                
+                <td style="width: 10%;border-top: 1px solid #14469C;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:black;" data-dojo-attach-point="totalImpuestos_final">$ 0.00</div></td>               
+            </tr>             
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Mercanc&iacute;a:</label></td>
+                <td style="width: 15%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 150px;float:left;" data-dojo-attach-point="mercancia" required="false" uppercase="true" maxlength="60"></div></td>
+            </tr>            
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">ETA:</label></td>
+                <td colspan="4" style="width: 15%;"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="ETA" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                <td style="width: 15%;background-color:#14469C;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:white;">Total Cotizaci&oacute;n:</label></td>
+                <td style="width: 10%;background-color:#14469C;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:white;" data-dojo-attach-point="totalCotizacion">$ 0.00</div></td>
+                <td style="width: 10%;background-color:#14469C;"><div style="font-family:arial;font-size:12px;font-weight:bold;color:white;" data-dojo-attach-point="totalCotizacion_final">$ 0.00</div></td>     
+            </tr>             
+            <tr>
+                <td style="width: 15%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Observaciones (HTML):</label></td>
+                <td colspan="3" style="width: 45%;"><div data-dojo-type="dijit.form.Textarea" style="width: 100%;font-family:arial;font-size:13px;font-weight:normal;color:black;" data-dojo-attach-point="observaciones" maxlength="500" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>                
+            </tr> 
+        </table>
+        <table style="width: 100%;border-collapse: collapse;">
+            <tr>
+                <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Contenedor asociado</td>
+            </tr>	
+        </table>                
+        <table style="width: 100%;border-collapse: collapse;">                
+            <tr>
+                <td style="width: 15%;"><div data-dojo-attach-point="contenedorReferencia" style="font-family:arial;font-size:12px;font-weight:normal;color:black;"></div></td>
+                <td style="width: 85%;"><button data-dojo-attach-point="contenedorCrearButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onCrearContenedor" disabled="true">Crear</button></td>
+            </tr>                       
+        </table>                                        
+    </div>  
+    <br>
+    <div data-dojo-type="dijit.layout.ContentPane">    
+        <table style="width: 100%;">
+            <tr>
+                <td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+            </tr>
+        </table>
+    </div>
+</div>

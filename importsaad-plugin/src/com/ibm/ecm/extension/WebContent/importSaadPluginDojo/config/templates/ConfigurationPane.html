@@ -1,0 +1,47 @@
+<div>
+	<table class="propertyTable" role="presentation">
+		<tr>
+			<td colspan="2"class="propertyRowLabel"><b>Par&aacute;metros Cuenta de Servicio</b></td>
+		</tr>									
+		<tr>
+			<td class="propertyRowLabel">
+				<label for="usuario">Usuario</label>&nbsp;
+			</td>
+			<td class="propertyRowValue">
+			   <div  dojoAttachPoint="usuario" dojoType="ecm.widget.TextBox"></div>
+			</td>
+		</tr>
+		<tr>
+			<td class="propertyRowLabel">
+				<label for="contrasena">Contrase&ntilde;a</label>&nbsp;
+			</td>
+			<td class="propertyRowValue">
+				<div data-dojo-attach-point="contrasena" type="password" data-dojo-type="ecm.widget.ValidationTextBox"></div>
+			</td>
+		</tr>
+		<tr>
+			<td class="propertyRowLabel">
+				<label for=pteiva>Porcentaje de IVA</label>&nbsp;
+			</td>
+			<td class="propertyRowValue">
+				<div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="pteiva" value="0" maxlength="6" data-dojo-props="constraints: {max: 100.00, maxString: '100.00', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div>
+			</td>
+		</tr>        
+		<tr>
+			<td colspan="2"class="propertyRowLabel"><b>Gesti&oacute;n de Facturas</b></td>
+		</tr>
+		<tr>
+			<td class="propertyRowLabel">
+				<label for=administradoresGF>Administradores</label>&nbsp;
+			</td>
+			<td class="propertyRowValue">
+			   <div  dojoAttachPoint="administradoresGF" dojoType="ecm.widget.TextBox"></div>
+			</td>
+		</tr>										
+		<tr>
+			<td colspan="2" class="propertyRowLabel">
+				<button data-dojo-attach-point="saveButton" data-dojo-type="ecm.widget.Button" data-dojo-attach-event="onClick: onSave">Guardar Configuraci&oacute;n</button>
+			</td>		
+		</tr>			
+	</table>
+</div>

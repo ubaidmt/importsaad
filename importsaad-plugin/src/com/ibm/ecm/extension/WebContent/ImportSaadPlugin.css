@@ -1,18 +1,153 @@
+/* CSS requeridos para EnhancedGrid */
+@import url("/navigator/dojox/grid/enhanced/resources/claro/EnhancedGrid.css");
+
+.cotizacionesLaunchIcon,
+.contenedoresLaunchIcon,
 .reportesLaunchIcon {
 	width: 32px;
 	height: 32px;
-	background-position: -208px -16px;
-}
-
-.reportesLaunchIcon,
-.launchBarButton.dijitChecked .reportesLaunchIcon, 
-.launchBarButton.dijitFocused .reportesLaunchIcon { 
-	background-image: url('images/importSaadPlugin.svg');
 	background-repeat: no-repeat;
 }
+
+.cotizacionesLaunchIcon,
+.contenedoresLaunchIcon,
+.reportesLaunchIcon {
+	background: url('images/importSaadPlugin.svg') center no-repeat;
+}
+
+.cotizacionesLaunchIcon { background-position:-528px -16px; }
+.contenedoresLaunchIcon { background-position:-592px -16px; }
+.reportesLaunchIcon { background-position:-208px -16px; }
+
+.ecmLaunchBarContainer .launchBarButton.dijitToggleButtonHover .cotizacionesLaunchIcon,
+.launchBarButton.dijitChecked .cotizacionesLaunchIcon, 
+.launchBarButton.dijitFocused .cotizacionesLaunchIcon { background-position: -528px -80px; }
+
+.ecmLaunchBarContainer .launchBarButton.dijitToggleButtonHover .contenedoresLaunchIcon,
+.launchBarButton.dijitChecked .contenedoresLaunchIcon, 
+.launchBarButton.dijitFocused .contenedoresLaunchIcon { background-position:-592px -80px; }
 
 .ecmLaunchBarContainer .launchBarButton.dijitToggleButtonHover .reportesLaunchIcon,
 .launchBarButton.dijitChecked .reportesLaunchIcon, 
 .launchBarButton.dijitFocused .reportesLaunchIcon { background-position:-208px -80px; }
 
+/* Common icons */
+.searchIcon {
+	background-image: url('images/search.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
 
+.deleteIcon {
+	background-image: url('images/delete.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.checkIcon {
+	background-image: url('images/check.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.alertGreenIcon {
+	background-image: url('images/alert-green.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.alertAmberIcon {
+	background-image: url('images/alert-amber.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.alertRedIcon {
+	background-image: url('images/alert-red.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.lockIcon {
+	background-image: url('images/lock.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.unlockIcon {
+	background-image: url('images/unlock.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.viewDocIcon {
+	background-image: url('images/viewdoc.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.downloadIcon {
+	background-image: url('images/download.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+/* Mimetype icons */
+.mimePDF25 {
+	background-image: url('images/mime-pdf-25.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+.mimeXML25 {
+	background-image: url('images/mime-xml-25.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	height: 25px; 
+	width: 25px;
+}
+
+/* Estilos adicionales para feature reportes */
+.mandatoryReportField {
+	background-image: url('images/arrow-red.png');
+	background-repeat: no-repeat;
+	background-size: 100% 50%;
+	height: 20px; 
+	width: 20px;
+}
+
+.optionalReportField {
+	background-image: url('images/arrow-green.png');
+	background-repeat: no-repeat;
+	background-size: 100% 50%;
+	height: 20px; 
+	width: 20px;
+}
+
+.clearReportField {
+	background-size: 100% 100%;
+	height: 20px; 
+	width: 20px;
+}

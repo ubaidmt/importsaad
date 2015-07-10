@@ -1,0 +1,65 @@
+<div data-dojo-type="dijit.layout.ContentPane">	                
+    <div data-dojo-type="dijit.layout.ContentPane" style="height:100%;" data-dojo-props="region:'top'">  
+	  	<table style="width:100%;background-color:#FFFFFF;">	  	
+	  		<tr>
+	  			<td colspan="2" width="100%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Par&aacute;metros de Notificaci&oacute;n</td>
+	  		</tr>		  	
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">De:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailFrom" required=true></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td width="40%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Alias:</td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailAlias" required=false></div></td>
+	  		</tr>	
+	  		<tr>
+	  			<td width="40%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Correo(s) Oculto(s):</td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailBcc" required=false></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Usuario:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailUser" required=true></div></td>
+	  		</tr>		  			  				  				  			  			
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Contrase&ntilde;a:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailPassword" type="password" required=true></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td width="40%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Starttls:</td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="starttls" value=true data-dojo-props="checked: false"></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Servidor:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailHost" required=true></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Puerto:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="emailPort" required=true maxlength="4" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td colspan="2" width="100%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Par&aacute;metros de Sistema</td>
+	  		</tr>	 
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">M&aacute;ximo de resultados en b&uacute;squedas:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="maxRecords" value=500 required=true maxlength="4" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
+	  		</tr>
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">M&aacute;ximo de tiempo en b&uacute;squedas:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="timeLimit" value=180 required=true maxlength="3" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
+	  		</tr>		  			  			
+	  		<tr>
+	  			<td colspan="2" width="100%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Par&aacute;metros de Aplicaci&oacute;n</td>
+	  		</tr>	 		  		  			  			 
+	  		<tr>
+	  			<td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Folio Consecutivo:</label></td>
+	  			<td width="60%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="folioConsecutivo" required=true maxlength="10" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
+	  		</tr>	  			  			  		 			  		  			  		
+		</table>
+        <br>
+        <table style="width:100%;background-color:#FFFFFF;">	  	
+            <tr>
+                <td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+            </tr>
+        </table>    
+	</div>
+</div>

@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FileUtils;
 
 import com.ibm.ecm.extension.PluginServiceCallbacks;
+import com.ibm.ecm.extension.util.sax.Factura;
 import com.ibm.json.java.JSONObject;
 import com.filenet.api.util.UserContext;
 import com.filenet.api.admin.ClassDefinition;
@@ -53,8 +54,6 @@ import com.ibm.json.java.JSONArray;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import com.ibm.ecm.extension.service.xml.Factura;
-
 public class ContentService {
 	
 	private static final String stanza = "FileNetP8";
@@ -69,20 +68,8 @@ public class ContentService {
 		
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
-			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    os = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				os = callbacks.getP8ObjectStore(repositoryId);
-			}  			
+			// Get p8 connection based on context
+			os = ServiceUtil.getP8Connection(request, callbacks);					
 			
 			// Get form file params
 			FormFile uploadFile = callbacks.getRequestUploadFile();
@@ -189,6 +176,7 @@ public class ContentService {
 			}
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			error = e.getMessage();
 			
 		} finally {

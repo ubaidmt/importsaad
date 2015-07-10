@@ -1,0 +1,263 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+	<div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+		<span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title"><b>Configuraci&oacute;n Gesti&oacute;n de Contenedores</b></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onClose" title="${buttonCancel}" role="button">
+			<span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+		</span>		
+	</div>
+	<div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+        <div data-dojo-attach-point="tabsArea" data-dojo-type="dijit.layout.ContentPane" style="width:650px;height:440px;" data-dojo-props="region:'top'">        
+            <div data-dojo-attach-point="tabContainer" data-dojo-type="dijit.layout.TabContainer">
+                <div data-dojo-attach-point="cotizacionTab" title="Cotizador" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:true">
+                    <div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'sidebar', gutters:true" style="width:100%;">
+                        <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'top'">        
+                            <table width="100%" border="0" style="background-color:#FFFFFF;">		  			  			
+                                <tr>
+                                    <td colspan="2" width="100%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Par&aacute;metros para cotizar</td>
+                                </tr>	 		  		  			  			 
+                                <tr>
+                                    <td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Tipo de cambio:</label></td>
+                                    <td width="60%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="tipoCambio" maxlength="10" value="0" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                </tr>            
+                                <tr>
+                                    <td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">% IGI:</label></td>
+                                    <td width="60%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="IGI" maxlength="10" value="0" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                </tr>	  			
+                                <tr>
+                                    <td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">% DTA:</label></td>
+                                    <td width="60%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="DTA" maxlength="10" value="0" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                </tr>	  			            
+                                <tr>
+                                    <td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">PREV:</label></td>
+                                    <td width="60%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="PREV" maxlength="10" value="0" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                </tr>	  			                        
+                                <tr>
+                                    <td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">CNT:</label></td>
+                                    <td width="60%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 100px;" data-dojo-attach-point="CNT" maxlength="10" value="0" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                </tr>
+                                <tr>
+                                    <td width="40%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">% Ajuste final:</label></td>
+                                    <td width="60%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;" data-dojo-attach-point="ajusteCotizacion" maxlength="3" value="25" data-dojo-props="constraints: {max: 100.00, maxString: '100.00', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                </tr>                                
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div data-dojo-attach-point="etaTab" title="ETA" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:false">
+                    <div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'sidebar', gutters:true" style="width:100%;">
+                        <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'top'">                          
+                            <table width="100%" border="0" style="background-color:#FFFFFF;">	        
+                                <tr>
+                                    <td width="35%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Nombre de actividad</td>
+                                    <td width="35%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Base ETA</td>
+                                    <td width="15%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Dias ETA</td>
+                                    <td width="15%" style="font-family:arial;font-size:12px;font-weight:bold;color:black;">Previo alerta</td>
+                                </tr>
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Llegada a puerto:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseLlegadaPuerto" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                        </select>
+                                    </td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasLlegadaPuerto" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoLlegadaPuerto" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Proforma de impuestos:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseProformaImpuestos" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasProformaImpuestos" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoProformaImpuestos" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr> 
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Solicitud de impuestos a cliente:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseSolicitudImpuestosCliente" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasSolicitudImpuestosCliente" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoSolicitudImpuestosCliente" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                 
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Pago de impuestos:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="basePagoImpuestos" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasPagoImpuestos" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoPagoImpuestos" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                 
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Revalidaci&oacute;n:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseRevalidacion" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasRevalidacion" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoRevalidacion" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                  
+ 
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Salida de puerto:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseSalidaPuerto" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                            
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasSalidaPuerto" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoSalidaPuerto" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>  
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Programaci&oacute;n a ferrocarril:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseProgFerrocarril" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                           
+                                            <option value="5">Salida de puerto</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasProgFerrocarril" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoProgFerrocarril" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                  
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Programaci&oacute;n de entrega a bodega:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseProgEntregaBodega" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                           
+                                            <option value="5">Salida de puerto</option>
+                                            <option value="6">Programaci&oacute;n a ferrocarril</option>
+                                        </select>                                        
+                                    </td>                                      
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasProgEntregaBodega" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoProgEntregaBodega" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                                                  
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Llegada a almac&eacute;n local:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseLlegadaAlmacenLocal" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                           
+                                            <option value="5">Salida de puerto</option>
+                                            <option value="6">Programaci&oacute;n a ferrocarril</option>
+                                            <option value="7">Programaci&oacute;n de entrega a bodega</option>
+                                        </select>                                        
+                                    </td>                                  
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasLlegadaAlmacenLocal" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoLlegadaAlmacenLocal" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Salida de almac&eacute;n local:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseSalidaAlmacenLocal" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                           
+                                            <option value="5">Salida de puerto</option>
+                                            <option value="6">Programaci&oacute;n a ferrocarril</option>
+                                            <option value="7">Programaci&oacute;n de entrega a bodega</option>
+                                            <option value="8">Llegada a almac&eacute;n local</option>                                            
+                                        </select>                                        
+                                    </td>    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasSalidaAlmacenLocal" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoSalidaAlmacenLocal" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Entrega a cliente:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseEntregaCliente" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                           
+                                            <option value="5">Salida de puerto</option>
+                                            <option value="6">Programaci&oacute;n a ferrocarril</option>
+                                            <option value="7">Programaci&oacute;n de entrega a bodega</option>
+                                            <option value="8">Llegada a almac&eacute;n local</option>                                                                                    
+                                            <option value="9">Salida de almac&eacute;n local</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasEntregaCliente" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoEntregaCliente" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: 0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                  
+                                <tr>
+                                    <td width="35%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Demoras:</label></td>
+                                    <td width="35%">
+                                        <select data-dojo-attach-point="baseDemoras" data-dojo-type="ecm.widget.Select" required="true" value="-1" style="width:160px;">
+                                            <option value="-1">Fecha base de contenedor</option>
+                                            <option value="0">Llegada a puerto</option>
+                                            <option value="1">Proforma de impuestos</option>
+                                            <option value="2">Solicitud de impuestos a cliente</option>                                            
+                                            <option value="3">Pago de impuestos</option>
+                                            <option value="4">Revalidaci&oacute;n</option>                                           
+                                            <option value="5">Salida de puerto</option>
+                                            <option value="6">Programaci&oacute;n a ferrocarril</option>
+                                            <option value="7">Programaci&oacute;n de entrega a bodega</option>
+                                            <option value="8">Llegada a almac&eacute;n local</option>                                                                                    
+                                            <option value="9">Salida de almac&eacute;n local</option>
+                                            <option value="10">Entrega a cliente</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="diasDemoras" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -1, minString: '-1'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+                                    <td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" style="width: 60px;float:left;" data-dojo-attach-point="previoDemoras" required="true" value="0" maxlength="2" data-dojo-props="constraints: {max: 99, maxString: '0', min: -0, minString: '0'}, invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                    
+                                </tr>                                 
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	    <br>		
+    	<div data-dojo-type="dijit.layout.ContentPane" style="width:650px;height:20px;" data-dojo-props="region:'bottom'">                
+            <table width="100%" border="0" style="background-color:#FFFFFF;">
+                <tr>
+                    <td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+                </tr>
+            </table>
+        </div>
+	</div>
+    <div data-dojo-attach-point="actionBar" class="dijitDialogPaneActionBar">
+        <button data-dojo-attach-point="saveButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onSave">Guardar</button>
+        <button data-dojo-attach-point="refreshButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onLoad">Refrescar</button>
+        <button data-dojo-attach-point="closeButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onClose">Cerrar</button>
+    </div>    
+</div>

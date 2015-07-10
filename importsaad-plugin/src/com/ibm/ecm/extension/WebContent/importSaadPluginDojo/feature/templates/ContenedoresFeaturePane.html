@@ -1,0 +1,95 @@
+<div class="ecmCenterPane">
+	<div data-dojo-attach-point="borderContainer" data-dojo-type="idx.layout.BorderContainer" data-dojo-props="gutters:true">
+		<div data-dojo-type="dijit.layout.ContentPane" style="height:20%;border-bottom:1px solid #cdced2;" data-dojo-props="splitter:true,region:'top'">
+			<table width="100%">
+				<tr>
+					<td width="50%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Criterios para consulta de contenedores</td>
+					<td width="50%" align="right"><label style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">N&uacute;mero m&aacute;ximo de resultados (1-9999): </label><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="maxResults" style="width:50px;" maxlength="4" value="50" required="true" data-dojo-props="constraints: {max: 9999, maxString: '9999', min: 1, minString: '1'}, pattern: '^[0-9]*$', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+				</tr>	
+			</table>
+			<table width="99%" align="center">		
+				<tr>
+					<td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Contenedor:</td>
+					<td width="7%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 160px;" data-dojo-attach-point="contenedor" uppercase="true" maxlength="30"></div></td>                    
+					<td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Pedimento:</td>
+					<td width="7%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 160px;" data-dojo-attach-point="pedimento" uppercase="true" maxlength="30"></div></td>
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Mercancia:</td>
+					<td width="7%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 150px;" data-dojo-attach-point="mercancia" uppercase="true" maxlength="60"></div></td>                    
+					<td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Cliente:</td>
+					<td width="7%"><div data-dojo-attach-point="clientesDiv"></div></td>	
+					<td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Naviera:</td>
+					<td width="7%"><div data-dojo-attach-point="navierasDiv"></div></td>	
+					<td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Forwader:</td>
+					<td width="7%"><div data-dojo-attach-point="forwardersDiv"></div></td>	
+                </tr>
+                <tr>
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Creado Desde:</td>
+                    <td width="7%"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="creacionDesde" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Creado Hasta:</td>
+                    <td width="7%"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="creacionHasta" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>                    
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Base Desde:</td>
+                    <td width="7%"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="baseDesde" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Base Hasta:</td>
+                    <td width="7%"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="baseHasta" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>                                   
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Etapa:</td>
+                    <td width="7%">
+                        <select data-dojo-attach-point="estados" data-dojo-type="ecm.widget.FilteringSelect" style="width:160px;">
+                            <option value=""></option>
+                            <option value="X">EN PROGRESO</option>
+                            <option value="0">EN TRASLADO MARITIMO</option>
+                            <option value="1">EN PUERTO</option>
+                            <option value="2">EN TRASLADO TERRESTRE</option>
+                            <option value="3">EN ALMACEN LOCAL</option>
+                            <option value="4">EN ENTREGA A CLIENTE</option>
+                            <option value="5">EN RETORNO DE VACIO</option>
+                            <option value="99">CONCLUIDO</option>
+                        </select>	                    
+                    </td>
+                    <td width="5%" align="right" style="font-family:arial;font-size:12px;font-weight:normal;color:#14469C;">Sem&aacute;foro:</td>
+                    <td width="7%">
+                        <select data-dojo-attach-point="semaforos" data-dojo-type="ecm.widget.FilteringSelect" style="width:100px;">
+                            <option value=""></option>
+                            <option value="0">VERDE</option>
+                            <option value="1">AMBAR</option>
+                            <option value="2">ROJO</option>
+                            <option value="X">ALERTADO</option>                            
+                        </select>	                    
+                    </td>
+				</tr>
+            </table>
+			<br>
+			<table width="100%">
+				<tr>
+					<td width="1%"><button data-dojo-attach-point="searchButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onSearch">Consultar</button></td>
+                    <td width="1%"><button data-dojo-attach-point="addButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onAdd">Agregar</button></td>
+                    <td width="1%"><button data-dojo-attach-point="updateButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onUpdate">Actualizar</button></td>
+                    <td width="1%"><button data-dojo-attach-point="deleteButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDelete">Eliminar</button></td>
+					<td width="96%"><button data-dojo-attach-point="cleanButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onClean">Limpiar</button></td>
+				</tr>
+			</table>            
+			<table width="100%">
+				<tr>
+					<td width="50%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Resultado de la consulta</td>
+					<td width="50%" align="right"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="filtro" placeholder="filtro por contenedor" style="width:250px; border: 1px solid #848484; -webkit-border-radius: 30px; -moz-border-radius: 30px; border-radius: 30px; outline:0; padding-left:10px; padding-right:10px;" maxlength="64"></div></td>								
+				</tr>	
+			</table>            
+        </div>
+		<div data-dojo-type="dijit.layout.ContentPane" style="height:75%;border-top:1px solid #cdced2;border-bottom:1px solid #cdced2;" data-dojo-props="splitter:true,region:'center'">					
+			<div data-dojo-attach-point="borderContainer" data-dojo-type="dijit.layout.LayoutContainer" data-dojo-props="design:'sidebar'">
+				<div data-dojo-type="dijit.layout.ContentPane" style="width:70%;border-bottom:1px solid #cdced2;" data-dojo-props="region:'leading'">
+					<div data-dojo-attach-point="gridDiv" style="width:98%;"></div>
+				</div>
+				<div data-dojo-type="dijit.layout.ContentPane" style="width:30%;border-bottom:1px solid #cdced2;" data-dojo-props="region:'center'">
+					<div data-dojo-attach-point="detalleDiv" style="width:100%;"></div>
+				</div>
+			</div>
+		</div>        
+        <div data-dojo-type="dijit.layout.ContentPane" style="height:5%;border-top:1px solid #cdced2;" data-dojo-props="splitter:true,region:'bottom'">	
+			<table width="100%" style="padding-top:10px;">
+				<tr>
+					<td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+				</tr>
+			</table>	            
+        </div>
+	</div>
+</div>			

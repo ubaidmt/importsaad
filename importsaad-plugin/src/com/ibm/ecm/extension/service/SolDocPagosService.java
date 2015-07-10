@@ -1,5 +1,6 @@
 package com.ibm.ecm.extension.service;
 
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ import java.util.TimeZone;
 import java.util.Map;
 import java.util.HashMap;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -32,7 +33,6 @@ import com.filenet.api.constants.FilteredPropertyType;
 import com.filenet.api.constants.RefreshMode;
 import com.filenet.api.core.ContentTransfer;
 import com.filenet.api.core.VersionSeries;
-import com.filenet.api.core.Connection;
 import com.filenet.api.core.Factory;
 import com.filenet.api.core.Folder;
 import com.filenet.api.core.Document;
@@ -45,45 +45,101 @@ import com.filenet.api.query.SearchSQL;
 import com.filenet.api.query.SearchScope;
 import com.filenet.api.util.Id;
 import com.filenet.api.util.UserContext;
+import com.ibm.ecm.extension.PluginService;
 import com.ibm.ecm.extension.PluginServiceCallbacks;
-import com.ibm.ecm.extension.service.mail.MailService;
+import com.ibm.ecm.extension.util.mail.MailService;
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 
-public class SolDocPagosService {
-	
-	private static final String stanza = "FileNetP8";
+public class SolDocPagosService  extends PluginService {
+		
 	private final static SimpleDateFormat longDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	private final static DecimalFormat df = new DecimalFormat("$#,##0.00");
 	private final static String devolucionesReadOnlyPolicy = "{2080EE0E-21AE-4D83-847C-F6E8E1CDF364}";
 	private final static String pagoslReadOnlyPolicy = "{A629E2CF-F9C7-43F9-89F3-19D017314E55}";
 	
+	@Override	
+	public String getId() {
+		return "SolDocPagosService";
+	}			
+	
+	@Override	
+	public void execute(PluginServiceCallbacks callbacks, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		String methodName = request.getParameter("method");
+		if (methodName == null)
+			throw new Exception("No se ha incluido el nombre del método a invocar.");
+		
+		callbacks.getLogger().logEntry(this, methodName, request);
+			
+		try {
+	
+			JSONObject result = new JSONObject();
+			if (methodName.equals("getEmpresas"))
+				result = getEmpresas(request, callbacks);
+			else if (methodName.equals("searchFacturas"))
+				result = searchFacturas(request, callbacks);	
+			else if (methodName.equals("searchDevoluciones"))
+				result = searchDevoluciones(request, callbacks);			
+			else if (methodName.equals("savePagosDeCliente"))
+				result = savePagosDeCliente(request, callbacks);
+			else if (methodName.equals("savePagosACliente"))
+				result = savePagosACliente(request, callbacks);			
+			else if (methodName.equals("savePagosDeProveedor"))
+				result = savePagosDeProveedor(request, callbacks);			
+			else if (methodName.equals("getSaldoFacturas"))
+				result = getSaldoFacturas(request, callbacks);
+			else if (methodName.equals("getSaldoProveedor"))
+				result = getSaldoProveedor(request, callbacks);
+			else if (methodName.equals("getSaldoCliente"))
+				result = getSaldoCliente(request, callbacks);				
+			else if (methodName.equals("getClientesDevolucion"))
+				result = getClientesDevolucion(request, callbacks);
+			else if (methodName.equals("addPago"))
+				result = addPago(request, callbacks);
+			else if (methodName.equals("deletePago"))
+				result = deletePago(request, callbacks);		
+			else if (methodName.equals("notificaDevolucionProveedor"))
+				result = notificaDevolucionProveedor(request, callbacks);
+			else if (methodName.equals("notificaDevolucionCliente"))
+				result = notificaDevolucionCliente(request, callbacks);			
+			else if (methodName.equals("deleteDevolucion"))
+				result = deleteDevolucion(request, callbacks);	
+			else if (methodName.equals("searchDevolucionesSaldoPendiente"))
+				result = searchDevolucionesSaldoPendiente(request, callbacks);
+			else
+				throw new Exception("No se identificó el método incluido en el servicio.");
+
+			// Send the response json
+			PrintWriter writer = response.getWriter();
+			result.serialize(writer);		
+			
+		} catch (Exception e) {
+			callbacks.getLogger().logError(this, methodName, request, e);
+			JSONObject jsonResponse = new JSONObject();
+			jsonResponse.put("error", "Ocurrió un error al momento de invocar un servicio. " + e.getMessage());
+			PrintWriter writer = response.getWriter();
+			jsonResponse.serialize(writer);			
+			
+		} finally {
+			callbacks.getLogger().logExit(this, methodName, request);
+		}		
+	}	
+	
 	@SuppressWarnings("unchecked")
-	public static JSONObject getEmpresas(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject getEmpresas(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		JSONArray empresas = new JSONArray();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject jsonCliente = JSONObject.parse(request.getParameter("cliente"));
 			int estado = Integer.parseInt(request.getParameter("estado"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get folder cliente
 			Folder cliente = null;
@@ -100,10 +156,10 @@ public class SolDocPagosService {
 		    sql.setWhereClause("This INSUBFOLDER '" + cliente.get_PathName() + "' AND Empresa IS NOT NULL AND EstadoCFDI = " + estado);
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		  
 		    
-		    RepositoryRowSet rowSet = search.fetchRows(sql, 50, null, true);
+		    RepositoryRowSet rowSet = search.fetchRows(sql, null, null, true);
 		    
 		    for (Iterator<RepositoryRow> it = rowSet.iterator(); it.hasNext(); ) 
 		    {
@@ -133,29 +189,17 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject getClientesDevolucion(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject getClientesDevolucion(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		JSONArray clientes = new JSONArray();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			int tipo = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}		
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);		
 			
 		    SearchScope search = new SearchScope(objStore);
 		    SearchSQL sql = new SearchSQL();
@@ -172,11 +216,11 @@ public class SolDocPagosService {
 		    sql.setWhereClause(whereStatement.toString());
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));			
 		    		    
-		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -210,30 +254,18 @@ public class SolDocPagosService {
 	}		
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject getSaldoFacturas(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject getSaldoFacturas(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		double saldo = 0;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject jsonCliente = JSONObject.parse(request.getParameter("cliente"));
 			int estado = Integer.parseInt(request.getParameter("estado"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get folder cliente
 			Folder cliente = null;
@@ -250,11 +282,11 @@ public class SolDocPagosService {
 		    sql.setWhereClause("This INSUBFOLDER '" + cliente.get_PathName() + "' AND EstadoCFDI = " + estado);
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    RepositoryRowSet rowSet = search.fetchRows(sql, 50, null, true);
+		    RepositoryRowSet rowSet = search.fetchRows(sql, null, null, true);
 		    
 		    for (Iterator<RepositoryRow> it = rowSet.iterator(); it.hasNext(); ) 
 		    {
@@ -280,31 +312,19 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject getSaldoProveedor(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject getSaldoProveedor(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		double saldo = 0;
 		double saldo1 = 0;
 		double saldo2 = 0;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject jsonProveedor = JSONObject.parse(request.getParameter("proveedor"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}		
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);	
 			
 			// Get devoluciones pendientes
 		    SearchScope search = new SearchScope(objStore);
@@ -314,11 +334,11 @@ public class SolDocPagosService {
 		    sql.setWhereClause("This INSUBFOLDER '/Facturas' AND Proveedor = " + jsonProveedor.get("id").toString() + " AND TipoDevolucion = 0 AND isCurrentVersion = TRUE AND Pendiente = TRUE");
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 		    
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -338,7 +358,7 @@ public class SolDocPagosService {
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 		    
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -365,31 +385,19 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject getSaldoCliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject getSaldoCliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		double saldo = 0;
 		double saldo1 = 0;
 		double saldo2 = 0;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject jsonCliente = JSONObject.parse(request.getParameter("cliente"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}	
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get folder cliente
 			Folder cliente = null;
@@ -407,11 +415,11 @@ public class SolDocPagosService {
 		    sql.setWhereClause("This INSUBFOLDER '" + cliente.get_PathName() + "' AND TipoDevolucion = 1 AND Pendiente = TRUE AND isCurrentVersion = TRUE");
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 		    
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -431,7 +439,7 @@ public class SolDocPagosService {
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 		    
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -458,31 +466,19 @@ public class SolDocPagosService {
 	}			
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject searchFacturas(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject searchFacturas(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		JSONArray facturas = new JSONArray();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject jsonCliente = JSONObject.parse(request.getParameter("cliente"));
 			JSONObject jsonEmpresa = JSONObject.parse(request.getParameter("empresa"));
 			int estado = Integer.parseInt(request.getParameter("estado"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get folder cliente
 			Folder cliente = null;
@@ -499,11 +495,11 @@ public class SolDocPagosService {
 		    sql.setWhereClause("This INSUBFOLDER '" + cliente.get_PathName() + "' AND Empresa = " + jsonEmpresa.get("id").toString() + " AND EstadoCFDI = " + estado);
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    RepositoryRowSet rowSet = search.fetchRows(sql, 50, null, true);
+		    RepositoryRowSet rowSet = search.fetchRows(sql, null, null, true);
 		    
 		    for (Iterator<RepositoryRow> it = rowSet.iterator(); it.hasNext(); ) 
 		    {
@@ -544,30 +540,18 @@ public class SolDocPagosService {
 	}		
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject searchDevoluciones(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject searchDevoluciones(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		JSONArray devoluciones = new JSONArray();
 		JSONObject jsonDevolucion = new JSONObject();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			int tipo = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			Folder cliente = null;
 									
@@ -595,11 +579,11 @@ public class SolDocPagosService {
 		    sql.setWhereClause(whereStatement.toString());
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 		    
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -621,7 +605,7 @@ public class SolDocPagosService {
 				jsonData.put("proveedor", ((Folder) props.getEngineObjectValue("Proveedor")).get_FolderName());
 		    	jsonData.put("empresa", ((Folder) props.getEngineObjectValue("Empresa")).get_FolderName());
 		    	jsonData.put("cliente", cliente.get_FolderName());
-		    	jsonData.put("fechaSolicitud", sdf.format(getUTFCalendar(props.getDateTimeValue("DateCreated")).getTime()));
+		    	jsonData.put("fechaSolicitud", sdf.format(props.getDateTimeValue("DateCreated")));
 		    	jsonData.put("devolucionSolicitadaProveedor", jsonDevolucion.get("devolucionSolicitadaProveedor"));
 		    	jsonData.put("devolucionSolicitadaDistribuidor", jsonDevolucion.get("devolucionSolicitadaDistribuidor"));
 		    	byte[] data = cliente.getProperties().getBinaryValue("ClbJSONData");
@@ -649,30 +633,18 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject searchDevolucionesSaldoPendiente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject searchDevolucionesSaldoPendiente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		JSONArray devoluciones = new JSONArray();
 		JSONObject jsonDevolucion = new JSONObject();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			int tipo = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			Folder cliente = null;
 									
@@ -702,18 +674,18 @@ public class SolDocPagosService {
 				whereStatement.append(" AND Empresa = " + jsonEmpresa.get("id").toString());
 			}	
 			if (request.getParameter("fechaSolicitudDesde") != null)
-				whereStatement.append(" AND DateCreated >= " + convertLocalTimeToUTC(longDateFormat.parse(request.getParameter("fechaSolicitudDesde").toString() + " 00:00:00")));
+				whereStatement.append(" AND DateCreated >= " + ServiceUtil.convertLocalTimeToUTC(longDateFormat.parse(request.getParameter("fechaSolicitudDesde").toString() + " 00:00:00")));
 			if (request.getParameter("fechaSolicitudHasta") != null)
-				whereStatement.append(" AND DateCreated <= " + convertLocalTimeToUTC(longDateFormat.parse(request.getParameter("fechaSolicitudHasta").toString() + " 00:00:00")));
+				whereStatement.append(" AND DateCreated <= " + ServiceUtil.convertLocalTimeToUTC(longDateFormat.parse(request.getParameter("fechaSolicitudHasta").toString() + " 00:00:00")));
 				
 		    sql.setWhereClause(whereStatement.toString());
 
 		    // performance settings
-		    JSONObject jsonSettings = SolDocService.getSettingsObject(objStore);
+		    JSONObject jsonSettings = ServiceUtil.getSettingsObject(objStore);
 			sql.setMaxRecords(Integer.parseInt(jsonSettings.get("maxRecords").toString()));
 			sql.setTimeLimit(Integer.parseInt(jsonSettings.get("timeLimit").toString()));		    
 		    		    
-		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, 50, null, true);
+		    DocumentSet docSet = (DocumentSet) search.fetchObjects(sql, null, null, true);
 		    
 		    for (Iterator<Document> it = docSet.iterator(); it.hasNext(); ) 
 		    {
@@ -734,7 +706,7 @@ public class SolDocPagosService {
 				jsonData.put("proveedor", ((Folder) props.getEngineObjectValue("Proveedor")).get_FolderName());
 		    	jsonData.put("empresa", ((Folder) props.getEngineObjectValue("Empresa")).get_FolderName());
 		    	jsonData.put("cliente", getCliente(firstFactura).get_FolderName());
-		    	jsonData.put("fechaSolicitud", sdf.format(getUTFCalendar(props.getDateTimeValue("DateCreated")).getTime()));
+		    	jsonData.put("fechaSolicitud", sdf.format(props.getDateTimeValue("DateCreated")));
 		    	jsonData.put("devolucionSolicitadaProveedor", jsonDevolucion.get("devolucionSolicitadaProveedor"));
 		    	jsonData.put("devolucionSolicitadaDistribuidor", jsonDevolucion.get("devolucionSolicitadaDistribuidor"));
 		    	jsonData.put("saldo", devolucion.getProperties().getFloat64Value("Saldo"));
@@ -759,31 +731,19 @@ public class SolDocPagosService {
 		
 	}	
 	
-	public static JSONObject savePagosDeCliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject savePagosDeCliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		int status = 0;
 		String error = null;	
-		ObjectStore objStore = null;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONArray jsonFacturas = JSONArray.parse(request.getParameter("facturas"));
 			JSONObject jsonPago = JSONObject.parse(request.getParameter("pago"));
 			JSONObject datos = JSONObject.parse(request.getParameter("datos"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get temp folder
 			Folder temp = null;
@@ -800,7 +760,7 @@ public class SolDocPagosService {
 				pago.changeClass("SolDocPago");
 				pago.save(RefreshMode.REFRESH);					
 			} else {
-				pago = Factory.Document.createInstance(callbacks.getP8ObjectStore(repositoryId), "SolDocPago");
+				pago = Factory.Document.createInstance(objStore, "SolDocPago");
 				pago.checkin(AutoClassify.DO_NOT_AUTO_CLASSIFY, CheckinType.MAJOR_VERSION);
 			}				
 			
@@ -909,33 +869,21 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject savePagosDeProveedor(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject savePagosDeProveedor(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		int status = 0;
 		String error = null;	
-		ObjectStore objStore = null;
 		Map<Id, Document> pagosClonadosMap = new HashMap<Id, Document>();
 		List<Document> pagosProcesados = new ArrayList<Document>();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONArray jsonPagos = JSONArray.parse(request.getParameter("pagos"));
 			JSONArray jsonDevolucionesSaldoPendiente = JSONArray.parse(request.getParameter("devolucionesSaldoPendiente"));	
 			int tipoTransaccion = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}	
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get temp folder
 			Folder temp = null;
@@ -1202,32 +1150,20 @@ public class SolDocPagosService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject savePagosACliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject savePagosACliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		int status = 0;
 		String error = null;	
-		ObjectStore objStore = null;
 		List<Document> pagosProcesados = new ArrayList<Document>();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONArray jsonPagos = JSONArray.parse(request.getParameter("pagos"));
 			JSONArray jsonDevolucionesSaldoPendiente = JSONArray.parse(request.getParameter("devolucionesSaldoPendiente"));
 			int tipoTransaccion = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}	
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get temp folder
 			Folder temp = null;
@@ -1434,29 +1370,17 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject deleteDevolucion(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject deleteDevolucion(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject jsonDevolucion = JSONObject.parse(request.getParameter("devolucion"));
 			int tipo = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 			
 			// Get Devolucion
 			Document devolucion = Factory.Document.fetchInstance(objStore, jsonDevolucion.get("id").toString(), null);
@@ -1547,30 +1471,18 @@ public class SolDocPagosService {
 		return jsonResponse;		
 	}	
 	
-	public static JSONObject notificaDevolucionProveedor(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject notificaDevolucionProveedor(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		int status = 0;
 		String error = null;	
-		ObjectStore objStore = null;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONObject devolucion = JSONObject.parse(request.getParameter("devolucion"));
 			String observaciones = request.getParameter("observaciones");
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}	
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);	
 			
 			// Get solicitud de devolucion del proveedor
 			Document devolucionProveedor = null;
@@ -1610,30 +1522,18 @@ public class SolDocPagosService {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject notificaDevolucionCliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject notificaDevolucionCliente(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		int status = 0;
 		String error = null;	
-		ObjectStore objStore = null;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONArray jsonSolicitudes = JSONArray.parse(request.getParameter("solicitudes"));
 			String observaciones = request.getParameter("observaciones");
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}	
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);	
 			
 			for (Object obj : jsonSolicitudes) {
 				JSONObject jsonSolicitud = (JSONObject) obj;
@@ -1676,30 +1576,18 @@ public class SolDocPagosService {
 		
 	}	
 			
-	public static JSONObject addPago(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject addPago(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 		JSONObject pago = new JSONObject();
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			pago = JSONObject.parse(request.getParameter("pago"));
 			int tipo = Integer.parseInt(request.getParameter("tipo"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 									
 			// Get temp folder
 			Folder temp = null;
@@ -1716,7 +1604,7 @@ public class SolDocPagosService {
 				docPago.changeClass("SolDocPago");
 				docPago.save(RefreshMode.REFRESH);					
 			} else {
-				docPago = Factory.Document.createInstance(callbacks.getP8ObjectStore(repositoryId), "SolDocPago");
+				docPago = Factory.Document.createInstance(objStore, "SolDocPago");
 				docPago.checkin(AutoClassify.DO_NOT_AUTO_CLASSIFY, CheckinType.MAJOR_VERSION);
 			}				
 			
@@ -1771,28 +1659,16 @@ public class SolDocPagosService {
 		
 	}		
 	
-	public static JSONObject deletePago(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	private static JSONObject deletePago(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
-		ObjectStore objStore = null;
 
 		try {
 			
-			String repositoryId = request.getParameter("repositoryid");
-			String context = request.getParameter("context");
 			JSONArray pagos = JSONArray.parse(request.getParameter("pagos"));
 			
-			if (context != null) { // conexion por usuario se servicio
-				JSONObject jsonContext = JSONObject.parse(context);
-	    		Connection con = Factory.Connection.getConnection(jsonContext.get("serverName").toString());
-	    	    Subject subject = UserContext.createSubject(con, jsonContext.get("usuario").toString(), jsonContext.get("contrasena").toString(), stanza);
-	    	    UserContext.get().pushSubject(subject); 
-	    	    objStore = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), jsonContext.get("objectStoreName").toString(), null);
-			} else { // conexion por usuario activo
-				Subject subject = callbacks.getP8Subject(repositoryId);
-				UserContext.get().pushSubject(subject);			
-				objStore = callbacks.getP8ObjectStore(repositoryId);
-			}
+			// Get p8 connection based on context
+			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
 					
 			for (Object obj : pagos)
 			{
@@ -2027,7 +1903,7 @@ public class SolDocPagosService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static JSONObject getDatosDevolucionProveedor(ObjectStore os, Document devolucion) throws Exception {
+	private static JSONObject getDatosDevolucionProveedor(ObjectStore os, Document devolucion) throws Exception {
 
 		JSONObject jsonResult = new JSONObject();
 		double importeTotal = 0;
@@ -2211,21 +2087,9 @@ public class SolDocPagosService {
 		
 		return jsonResult;
 	}	
-	
-    private static String convertLocalTimeToUTC(Date localDate) throws Exception{     
-        SimpleDateFormat utcFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");   
-        utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateUTCAsString = utcFormat.format(getDate(localDate,"yyyy-MM-dd HH:mm:ss z"));   
-        return dateUTCAsString;   
-    }
-    
-    private static Date getDate(Date date, String format) throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.parse(sdf.format(date));
-    }  
     
     @SuppressWarnings("unchecked")
-	public static Document cloneDocument(ObjectStore os, String className, Document doc, String documentTitle, Map<String, Object> propsMap, String securityTemplateId) throws Exception {
+	private static Document cloneDocument(ObjectStore os, String className, Document doc, String documentTitle, Map<String, Object> propsMap, String securityTemplateId) throws Exception {
 		Document newDoc = Factory.Document.createInstance(os, className);
 		
 		if (!doc.get_ContentElements().isEmpty()) {

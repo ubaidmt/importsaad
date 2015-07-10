@@ -1,0 +1,354 @@
+<div data-dojo-type="dijit.layout.ContentPane">    
+    <div data-dojo-attach-point="tabContainer" data-dojo-type="dijit.layout.TabContainer" style="width:100%;height:85%;">
+        <div data-dojo-attach-point="generalTab" title="General" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:true">
+            <br>
+            <div data-dojo-type="dijit.layout.ContentPane">
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Datos generales</td>
+                    </tr>	
+                </table>   
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Contenedor:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 200px;float:left;" data-dojo-attach-point="numContenedor" required="true" uppercase="true" maxlength="30"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cliente:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="clientesDiv"></div></td>
+                    </tr>                        
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Fecha Base:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="fechaBase" style="width: 150px;" required="true" value="now" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                    </tr>                                                            
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Fecha Creaci&oacute;n:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="fechaCreacion" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"></div></td>
+                    </tr>                    
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Pedimento:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 200px;float:left;" data-dojo-attach-point="pedimento" required="false" uppercase="false" maxlength="30"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Mercanc&iacute;a:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 200px;float:left;" data-dojo-attach-point="mercancia" required="false" uppercase="true" maxlength="60"></div
+                    </tr>                                                                     
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Naviera:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="navierasDiv"></div></td>
+                    </tr>                       
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Forwarder:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="forwardersDiv"></div></td>
+                    </tr>                          
+                </table>
+                <br>                
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Estado actual</td>
+                    </tr>	
+                </table>   
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 20%;"><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Etapa:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="etapa" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Sem&aacute;foro:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="semaforoContenedor" style="width:15px;height:15px;"></div></td>
+                    </tr>                    
+                </table>
+                <br>
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Cotizaci&oacute;n asociada</td>
+                    </tr>	
+                </table>                
+                <table style="width: 100%;border-collapse: collapse;">                
+                    <tr>
+                        <td style="width: 20%;"><div data-dojo-attach-point="cotizacionReferencia" style="font-family:arial;font-size:12px;font-weight:normal;color:black;"></div></td>
+                        <td style="width: 80%;"><button data-dojo-attach-point="cotizacionReasociarButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onCotizacionReasociar" disabled="true">Reasociar</button></td>
+                    </tr>                       
+                </table>                                
+                <br>
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Observaciones</td>
+                    </tr>	
+                </table>                
+                <table style="width: 100%;border-collapse: collapse;">                
+                    <tr>
+                        <td style="width: 100%;"><div data-dojo-type="dijit.form.Textarea" style="width: 90%;font-family:arial;font-size:13px;font-weight:normal;color:black;" data-dojo-attach-point="observaciones" maxlength="1000" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div></td>
+                    </tr>                      
+                </table>                
+            </div>
+        </div>        
+        <div data-dojo-attach-point="datosAdicionalesTab" title="Datos Adicionales" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:false" disabled="true">
+            <br>
+            <div data-dojo-type="dijit.layout.ContentPane">                
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Datos adicionales</td>
+                    </tr>	
+                </table>   
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Proveedor:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="proveedoresDiv"></div></td>
+                    </tr>  
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Importadora:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="importadorasDiv"></div></td>
+                    </tr>  
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Buque:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 300px;float:left;" data-dojo-attach-point="buque"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Puerto Salida:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="puertosSalidaDiv"></div></td>
+                    </tr>  
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Puerto Llegada:</label></td>
+                        <td style="width: 80%;"><div data-dojo-attach-point="puertosLlegadaDiv"></div></td>
+                    </tr> 
+                    <tr>
+                        <td width="20%"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Incoterm:</label></td>
+                        <td width="80%">
+                            <select data-dojo-attach-point="incoterm" data-dojo-type="ecm.widget.Select" required="true" value="FOB" style="width:50px;">
+                                <option value="EXW">EXW</option>
+                                <option value="FCA">FCA</option>                                            
+                                <option value="FAS">FAS</option>                                            
+                                <option value="FOB">FOB</option>
+                                <option value="CFR">CFR</option>
+                                <option value="CIF">CIF</option>
+                                <option value="DES">DES</option>
+                                <option value="DEQ">DEQ</option>
+                                <option value="DDU">DDU</option>
+                                <option value="DDP">DDP</option>
+                            </select>                                        
+                        </td>                         
+                    </tr>                            
+                </table>   
+                <br>
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Factura comercial</td>
+                    </tr>	
+                </table>  
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">N&uacute;mero Factura:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100px;float:left;" data-dojo-attach-point="numeroFactura"></div></td>
+                    </tr>  
+                    <tr>
+                        <td style="width: 20%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Fecha Factura:</label></td>
+                        <td style="width: 80%;"><div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="fechaFactura" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                    </tr>                     
+                </table>
+            </div>
+        </div>
+        <div data-dojo-attach-point="checklistTab" title="Checklist" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:false" disabled="true">
+            <br>
+            <div data-dojo-type="dijit.layout.ContentPane">
+                <table style="width: 100%;border-collapse: collapse;" border="0">
+                    <tr>
+                        <td style="width:50%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Nombre de actividad</td>
+                        <td style="width:1%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;"></td>
+                        <td style="width:1%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;"></td>
+                        <td style="width:24%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">ETA</td>
+                        <td style="width:1%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;"></td>
+                        <td style="width:24%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Completado</td>
+                        <td style="width:1%;font-family:arial;font-size:12px;font-weight:bold;color:#14469C;"></td>
+                    </tr>		  	
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Llegada a puerto</label></td>
+                        <td style="width: 1%;"><div id="lockETA_0" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_0" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_0" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_0"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_0" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_0" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Proforma de impuestos:</label></td>
+                        <td style="width: 1%;"><div id="lockETA_1" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_1" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_1" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_1"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_1" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_1" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>  
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Solicitud de impuestos a cliente</label></td>
+                        <td style="width: 1%;"><div id="lockETA_2" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_2" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_2" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_2"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_2" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_2" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>                      
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Pago de impuestos</label></td>
+                        <td style="width: 1%;"><div id="lockETA_3" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_3" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_3" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_3"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_3" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_3" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>                    
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Revalidaci&oacute;n</label></td>
+                        <td style="width: 1%;"><div id="lockETA_4" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_4" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_4" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_4"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_4" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_4" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Salida de puerto</label></td>
+                        <td style="width: 1%;"><div id="lockETA_5" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_5" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_5" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_5"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_5" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_5" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Programaci&oacute;n a ferrocarril</label></td>
+                        <td style="width: 1%;"><div id="lockETA_6" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_6" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_6" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_6"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_6" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_6" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Programaci&oacute;n de entrega a bodega</label></td>
+                        <td style="width: 1%;"><div id="lockETA_7" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_7" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_7" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_7"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_7" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_7" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>                    
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Llegada a almac&eacute;n local</label></td>
+                        <td style="width: 1%;"><div id="lockETA_8" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_8" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_8" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_8"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_8" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_8" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Salida de almac&eacute;n local</label></td>
+                        <td style="width: 1%;"><div id="lockETA_9" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_9" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_9" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_9"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_9" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_9" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Entrega a cliente</label></td>
+                        <td style="width: 1%;"><div id="lockETA_10" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_10" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_10" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_10"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_10" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;"><div id="semaforoETA_10" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Demoras</label></td>
+                        <td style="width: 1%;"><div id="lockETA_11" class="unlockIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delETA_11" class="deleteIcon" style="width:15px;height:15px;"></div></td>
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpETA_11" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>
+                        <td style="width: 1%;" align="right"><div id="delDone_11"  class="deleteIcon" style="width:15px;height:15px;"></div></td>         
+                        <td style="width: 24%;"><div data-dojo-type="ecm.widget.DatePicker" id="dpDone_11" style="width: 150px;" constraints="{datePattern:'dd/MM/yyyy'}"></div></td>                        
+                        <td style="width: 1%;"><div id="semaforoETA_11" class="alertGreenIcon" style="width:15px;height:15px;"></div></td>
+                    </tr>                     
+                </table>
+            </div>
+        </div>
+        <div data-dojo-attach-point="documentosTab" title="Documentos" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="selected:false" disabled="true">
+            <br>
+            <div data-dojo-type="dijit.layout.ContentPane">
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="50%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Documentos asociados</td>
+                        <td width="50%" align="right"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="filtro" placeholder="filtro por nombre" style="width:250px; border: 1px solid #848484; -webkit-border-radius: 30px; -moz-border-radius: 30px; border-radius: 30px; outline:0; padding-left:10px; padding-right:10px;" maxlength="64"></div></td>								
+                    </tr>	
+                </table>                    
+                <div data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="gridArea" style="width:100%;height:200px;">
+                    <div data-dojo-attach-point="gridDiv" style="width: 100%;"></div>	
+                </div>                    
+            </div>
+            <br>
+            <div data-dojo-type="dijit.layout.ContentPane">
+                <table style="width: 100%;border-collapse: collapse;">
+                    <tr>
+                        <td width="100%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:#14469C;">Acciones sobre los documentos</td>
+                    </tr>	
+                </table>  
+                <table style="width: 100%;border-collapse: collapse;">	
+                    <tr>
+                        <td width="93%">
+                            <form data-dojo-attach-point="_fileInputForm"
+                                name="fileUploadForm"
+                                enctype="multipart/form-data"
+                                accept-charset="UTF-8"
+                                method="post"
+                                target="${id}_fileInputIFrame">
+                                <input type="file"
+                                    id="${id}_fileInput"
+                                    name="uploadFile"
+                                    class="fileInput"
+                                    data-dojo-attach-point="_fileInput"
+                                    data-dojo-attach-event="onChange: validateFileAddButton"/>
+                                <iframe name="${id}_fileInputIFrame"
+                                    id="${id}_fileInputIFrame"
+                                    style="display: none">
+                                </iframe>
+                            </form>				
+                        </td>
+                        <td width="1%"><button data-dojo-attach-point="createDocumentButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDocumentCreate">Generar</button></td>
+                        <td width="1%"><button data-dojo-attach-point="addFileButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDocumentAdd" disabled="true">Agregar</button></td>
+                        <td width="1%"><button data-dojo-attach-point="updateDocumentButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDocumentUpdate" disabled="true">Actualizar</button></td>     
+                        <td width="1%"><button data-dojo-attach-point="deleteDocumentButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDocumentDelete" disabled="true">Eliminar</button></td>    
+                        <td width="1%"><button data-dojo-attach-point="viewDocumentButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDocumentView" disabled="true">Ver</button></td>
+                        <td width="1%"><button data-dojo-attach-point="downloadDocumentButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onDocumentDownload" disabled="true">Descargar</button></td>
+                    </tr>
+                </table> 
+                <table style="width: 100%;border-collapse: collapse;">	
+                    <tr>
+                        <td width="30%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Tipo de Documento:</label></td>
+                        <td width="70%">
+                            <select data-dojo-attach-point="tipoDocumento" data-dojo-type="ecm.widget.Select" required="true" value="0" style="width:200px;">
+                                <option value="0">Bill of Lading</option>
+                                <option value="1">Factura Comercial</option>                                            
+                                <option value="2">Lista de Empaque</option>                                            
+                                <option value="3">Pedimiento</option>
+                                <option value="4">Carta T&eacute;cnica</option>
+                                <option value="5">Contrato con Proveedor</option>
+                                <option value="6">Notificaci&oacute;n de Arribo</option>
+                                <option value="7">Documentaci&oacute;n a Ferrocarril</option>
+                                <option value="8">EIR</option>
+                                <option value="99">Otro</option>
+                            </select>                                        
+                        </td>                         
+                    </tr>                    
+                </table>
+            </div>    
+        </div>
+    </div>
+    <br>
+    <div data-dojo-type="dijit.layout.ContentPane" style="width:100%;height:10%;">                
+        <table>
+            <tr>
+                <td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+            </tr>
+        </table>
+    </div>  
+</div>

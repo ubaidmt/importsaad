@@ -1,0 +1,263 @@
+<div class="ecmCenterPane">
+	<div data-dojo-type="idx.layout.BorderContainer" data-dojo-attach-point="reportesContainer" class="contentPane" gutters="false" design="sidebar">
+		<div data-dojo-type="dijit.layout.ContentPane" region="leading" style="width:15%;border-right:1px solid #cdced2;" class="paneNoOverflow" splitter="true">
+			<span data-dojo-attach-point="informationMessage"></span>
+			<br><br>
+			<div data-dojo-type="ecm.widget.FolderTree" data-dojo-attach-point="reportesTree"></div>									
+		</div>					
+		<form id="formDownloadReporte" action="/excelecm-cdn-common/DownloadReporte" target="iFrameReporte">
+			<input type="hidden" id="reporte" name="reporte" value="" />
+			<iframe id="iFrameReporte" name="iFrameReporte" src=""></iframe>
+		</form>		
+		<div data-dojo-type="dijit.layout.ContentPane" region="center" style="border-left:1px solid #cdced2;border-bottom:1px solid #cdced2;" class="paneNoOverflow" splitter="true">
+			<button data-dojo-attach-point="limpiaResultadosButton" data-dojo-type="dijit.form.Button">Limpiar</button>
+			<br><br>
+			<div data-dojo-attach-point="reportesGrid" style="width: 100%; height: 40px;"></div>
+			<br>
+			<div data-dojo-attach-point="mensajeContenidoGrid" style="font-family:verdana;font-size:12px;font-style:italic;font-weight:normal;" align="center"></div>	
+		</div>
+		<div data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="fieldsCriteriaContentPane" region="bottom" style="height:65%;border-left:1px solid #cdced2;border-top:1px solid #cdced2;" class="paneNoOverflow" splitter="true">
+			<div data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="fieldsCriteriaSubContentPane" stylse="width:100%;height:100%;">		
+				<br>
+				<div style="font-family:verdana;font-size:12px;font-weight:normal;padding:10px;border-radius:10px;border:2px solid white;color:white;background-color:#267DC5;" align="center">Criterios para la generaci&oacute;n de reportes</div>
+				<br>
+				<table border="0">
+					<tr>
+						<td width="10px"><button data-dojo-attach-point="ejecutaReporteButton" data-dojo-type="dijit.form.Button">Generar Reporte</button></td>
+					  <td width="200px" align="right">
+						<label>Formato de Salida:</label>
+						<div data-dojo-type="ecm.widget.HoverHelp" message="Formato en el que será generado el reporte seleccionado."></div>
+					  </td>
+					  <td width="50px">
+						<select data-dojo-attach-point="formatoSalida" data-dojo-type="ecm.widget.Select" id="formatoSalida">
+							<option value="0" selected="selected">PDF</option>
+							<option value="1">EXCEL</option>
+							<option value="3">HTML</option>
+						</select>
+					  </td>	
+						<td width="50px">
+							<div id="standByContainer" style="width: 50px; height: 30px;"></div>
+							<div id="standByWidget" data-dojo-type="dojox.widget.Standby" data-dojo-props="target:'standByContainer', color:'transparent', image:'/navigator/idx/themes/oneui/dijit/images/loadingAnimation.gif'"></div>					
+						</td>				
+						<td><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#970303;" style="display: none">&nbsp;</div></td>
+					</tr>
+				</table>
+				<br>
+				<!-- Panel de criterios en blanco -->
+				<div data-dojo-attach-point="criteriosPaneDefault" style="display:block;" style="background-color:#F7F6F6;">
+					<table width="100%" border="0">
+						<tr>
+							<td width="100%" align="center" style="font-family:verdana;font-size:12px;font-style:italic;font-weight:normal;">No existen criterios para el rubro de reportes seleccionado</td>
+						</tr>
+					</table>
+				</div>
+				<!-- Panel de Criterios para Gestion de Facturas -->
+				<div data-dojo-attach-point="criteriosPaneGF" style="display:none;">
+					<table width="100%" border="0" cellpadding="3" cellspacing="3">
+						<tr style="background-color:#F7F6F6;">
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramFechaSolicitudDesdePointer" id="paramFechaSolicitudDesdePointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Fecha de Registro Desde:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Fecha de registro inicial como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="paramFechaSolicitudDesde" id="paramFechaSolicitudDesde" constraints="{datePattern:'dd/MM/yyyy'}"></div>
+						  </td>			
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramFechaSolicitudHastaPointer" id="paramFechaSolicitudHastaPointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Fecha de Registro Hasta:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Fecha de registro final como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="paramFechaSolicitudHasta" id="paramFechaSolicitudHasta" constraints="{datePattern:'dd/MM/yyyy'}"></div>
+						  </td>					  
+						</tr>						  	
+						<tr style="background-color:#F7F6F6;">
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramFechaFacturaDesdePointer" id="paramFechaFacturaDesdePointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Fecha de Factura Desde:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Fecha de factura inicial como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="paramFechaFacturaDesde" id="paramFechaFacturaDesde" constraints="{datePattern:'dd/MM/yyyy'}"></div>
+						  </td>			
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramFechaFacturaHastaPointer" id="paramFechaFacturaHastaPointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Fecha de Factura Hasta:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Fecha de factura final como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="paramFechaFacturaHasta" id="paramFechaFacturaHasta" constraints="{datePattern:'dd/MM/yyyy'}"></div>
+						  </td>					  
+						</tr>		
+						<tr style="background-color:#F7F6F6;">
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramFechaPagoDesdePointer" id="paramFechaPagoDesdePointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Fecha de Pago Desde:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Fecha de pago inicial como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="paramFechaPagoDesde" id="paramFechaPagoDesde" constraints="{datePattern:'dd/MM/yyyy'}"></div>
+						  </td>			
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramFechaPagoHastaPointer" id="paramFechaPagoHastaPointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Fecha de Pago Hasta:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Fecha de pago final como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.DatePicker" data-dojo-attach-point="paramFechaPagoHasta" id="paramFechaPagoHasta" constraints="{datePattern:'dd/MM/yyyy'}"></div>
+						  </td>					  
+						</tr>							  
+						<tr style="background-color:#F7F6F6;">
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramImporteDesdePointer" id="paramImporteDesdePointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Importe Desde:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Importe inicial como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="paramImporteDesde" id="paramImporteDesde" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div>
+						  </td>			
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramImporteHastaPointer" id="paramImporteHastaPointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Importe Hasta:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Importe final como rango de fechas para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="paramImporteHasta" id="paramImporteHasta" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div>
+						  </td>					  
+						</tr>		
+						<tr style="background-color:#F7F6F6;">			
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramEstadoFacturaPointer" id="paramEstadoFacturaPointer" class="clearReportField" style="width:20px;"></div>
+						  </td>					  
+						  <td width="20%">
+							<label>Estado de Factura:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Estado de la factura a considerar para el reporte seleccionado."></div>
+						  </td>	 
+						  <td class="propertyRowValue" width="30%">
+						  	<select data-dojo-attach-point="paramEstadoFactura" data-dojo-type="ecm.widget.FilteringSelect" id="paramEstadoFactura" style="width:150px;">
+								<option value="">-- SELECCIONAR --</option>
+								<option value="0">PENDIENTE POR PAGAR</option>
+								<option value="1">PAGADA POR CLIENTE</option>
+								<option value="2">DEVUELTA POR PROVEEDOR</option>
+								<option value="3">DEVUELTA A CLIENTE</option>
+							</select>					  
+						  </td>									  
+						  <td width="20px">
+						  	<div data-dojo-attach-point="paramProveedorPointer" id="paramProveedorPointer" class="clearReportField" style="width:20px;"></div>
+						  </td>
+						  <td width="20%">
+							<label>Proveedor:</label>
+							<div data-dojo-type="ecm.widget.HoverHelp" message="Proveedor a considerar para el reporte seleccionado."></div>
+						  </td>
+						  <td class="propertyRowValue" width="30%">
+							<div data-dojo-attach-point="proveedoresDiv"></div>		
+						  </td>					  
+						</tr>	
+						  <tr style="background-color:#F7F6F6;">		
+							  <td width="20px">
+							  	<div data-dojo-attach-point="paramClientePointer" id="paramClientePointer" class="clearReportField" style="width:20px;"></div>
+							  </td>
+							  <td width="20%">
+								<label>Cliente:</label>
+								<div data-dojo-type="ecm.widget.HoverHelp" message="Cliente a considerar para el reporte seleccionado."></div>
+							  </td>
+							  <td class="propertyRowValue" width="30%">
+								<div data-dojo-attach-point="clientesDiv"></div>		
+							  </td>
+							  <td width="20px">
+							  	<div data-dojo-attach-point="paramEmpresaPointer" id="paramEmpresaPointer" class="clearReportField" style="width:20px;"></div>
+							  </td>
+							  <td width="20%">
+								<label>Empresa:</label>
+								<div data-dojo-type="ecm.widget.HoverHelp" message="Empresa a considerar para el reporte seleccionado."></div>
+							  </td>
+							  <td class="propertyRowValue" width="30%">
+								<div data-dojo-attach-point="empresasDiv"></div>			
+							  </td>							  								  
+						  </tr>	
+						 	<tr style="background-color:#F7F6F6;">											  
+							  <td width="20px">
+							  	<div data-dojo-attach-point="paramTipoPagoPointer" id="paramTipoPagoPointer" class="clearReportField" style="width:20px;"></div>
+							  </td>					  
+							  <td width="20%">
+								<label>Tipo de Pago:</label>
+								<div data-dojo-type="ecm.widget.HoverHelp" message="Tipo de pago a considerar para el reporte seleccionado."></div>
+							  </td>	 
+							  <td class="propertyRowValue" width="30%">
+								<select data-dojo-attach-point="paramTipoPago" data-dojo-type="ecm.widget.FilteringSelect" id="paramTipoPago" style="width:150px;">
+									<option value="">-- SELECCIONAR --</option>
+									<option value="0">PAGO DE CLIENTE</option>
+									<option value="1">DEVOLUCIÓN DE PROVEEDOR</option>
+									<option value="2">DEVOLUCIÓN A CLIENTE</option>
+									<option value="3">PAGO A SALDO PENDIENTE</option>
+								</select>					  
+							  </td>	
+							  <td width="20px">
+							  	<div data-dojo-attach-point="paramEstadoSaldoPointer" id="paramEstadoSaldoPointer" class="clearReportField" style="width:20px;"></div>
+							  </td>					  
+							  <td width="20%">
+								<label>Estado Saldo:</label>
+								<div data-dojo-type="ecm.widget.HoverHelp" message="Estado del saldo considerar para el reporte seleccionado."></div>
+							  </td>	 
+							  <td class="propertyRowValue" width="30%">
+							  	<select data-dojo-attach-point="paramEstadoSaldo" data-dojo-type="ecm.widget.FilteringSelect" id="paramEstadoSaldo" style="width:150px;">
+									<option value="">-- SELECCIONAR --</option>
+									<option value="0">SALDO PENDIENTE</option>
+									<option value="1">SIN SALDO</option>
+								</select>					  
+							  </td>									  					  
+						  	</tr>	
+						  </tr>	
+						 	<tr style="background-color:#F7F6F6;">		
+							  <td width="20px">
+							  	<div data-dojo-attach-point="paramTipoDevolucionPointer" id="paramTipoDevolucionPointer" class="clearReportField" style="width:20px;"></div>
+							  </td>					  
+							  <td width="20%">
+								<label>Tipo de Devolución:</label>
+								<div data-dojo-type="ecm.widget.HoverHelp" message="Tipo de devolución a considerar para el reporte seleccionado."></div>
+							  </td>	 
+							  <td class="propertyRowValue" width="30%">
+							  	<select data-dojo-attach-point="paramTipoDevolucion" data-dojo-type="ecm.widget.FilteringSelect" id="paramTipoDevolucion" style="width:150px;">
+									<option value="">-- SELECCIONAR --</option>
+									<option value="0">DEVOLUCIÓN DE PROVEEDOR</option>
+									<option value="1">DEVOLUCIÓN A CLIENTE</option>
+								</select>					  
+							  </td>	
+							  <td width="20px">
+								<div data-dojo-attach-point="paramEstadoDevolucionPointer" id="paramEstadoDevolucionPointer" class="clearReportField" style="width:20px;"></div>								  
+							  </td>					  
+							  <td width="20%">
+								<label>Estado de la Devolución:</label>
+								<div data-dojo-type="ecm.widget.HoverHelp" message="Estado de la devolución a considerar para el reporte seleccionado."></div>
+							  </td>	 
+							  <td class="propertyRowValue" width="30%">
+							  	<select data-dojo-attach-point="paramEstadoDevolucion" data-dojo-type="ecm.widget.FilteringSelect" id="paramEstadoDevolucion" style="width:150px;">
+									<option value="">-- SELECCIONAR --</option>
+									<option value="0">PENDIENTE</option>
+									<option value="1">DEVUELTA</option>
+								</select>					  
+							  </td>
+						  	</tr>							  	
+					</table>
+				</div>	
+			</div>		
+		</div>
+	</div>	
+</div>

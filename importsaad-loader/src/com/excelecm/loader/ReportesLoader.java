@@ -43,9 +43,7 @@ public class ReportesLoader {
 			// Gestion de Contenedores
 //			rubroReporte = "Gestión de Contenedores";
 //			granteeNames = new ArrayList<String>();
-//			granteeNames.add("GC_Full");
-//			granteeNames.add("GC_Modify");
-//			granteeNames.add("GC_View");
+//			granteeNames.add("#AUTHENTICATED-USERS");
 //			loader.deleteReportes(ceService, LoaderConstantes.ceOS, rubroReporte);
 //			loader.creaContenedor(ceService, LoaderConstantes.ceOS, rubroReporte, granteeNames);
 //			loader.creaReportes(ceService, LoaderConstantes.ceOS, "ReportesGC", rubroReporte, granteeNames);
@@ -53,8 +51,7 @@ public class ReportesLoader {
 			// Gestion de Facturas
 			rubroReporte = "Gestión de Facturas";
 			granteeNames = new ArrayList<String>();
-			granteeNames.add("GF_Administradores");
-			granteeNames.add("GF_Operadores");
+			granteeNames.add("#AUTHENTICATED-USERS");
 			loader.deleteReportes(ceService, LoaderConstantes.ceOS, rubroReporte);
 			loader.creaContenedor(ceService, LoaderConstantes.ceOS, rubroReporte, granteeNames);
 			loader.creaReportes(ceService, LoaderConstantes.ceOS, "ReportesGF", rubroReporte, granteeNames);

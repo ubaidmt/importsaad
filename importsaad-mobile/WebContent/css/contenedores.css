@@ -1,0 +1,34 @@
+.contenedorListItem {
+    line-height: 20px;
+    padding-top: 5px;
+    height: 40px;
+}
+.contenedorSummary {
+    padding-left: 85px;
+    padding-bottom: 0;
+    margin: 0;
+    position: relative;
+    vertical-align: middle;
+    height: 100%;
+}
+.contenedorTitle {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+.cliente {
+    font-size: 0.7em;
+    font-weight: normal;
+}
+.dateCreated {
+    font-size: 0.6em;
+    color: #777;
+    font-weight: normal;
+    position: absolute;
+    bottom: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.summaryClear {
+    clear: both;
+}

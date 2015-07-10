@@ -12,11 +12,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ExcelECM Commons"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/IBM Content Platform Engine"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Quartz"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/importsaad-common"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/IBM Content Navigator"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,16 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project name="ImportSaadPlugin" default="all" basedir=".">
 
-	<property name="J2EE_IBM" value="/opt/IBM/WebSphere/Liberty/dev/api/ibm" />
 	<property name="J2EE_SPEC" value="/opt/IBM/WebSphere/Liberty/dev/api/spec" />
 	<property name="RESOURCES_HOME" value="/Users/juansaad/git/excelecm/excelecm-resources/lib" />	
 	
 	<target name="all" depends="clean,compile,jar" />
 	
 	<path id="classpath">
-		<fileset id="j2ee_ibm.jars" dir="${J2EE_IBM}">
-			<include name="**/*.jar" />
-		</fileset>
 		<fileset id="j2ee_spec.jars" dir="${J2EE_SPEC}">
 			<include name="**/*.jar" />
 		</fileset>		

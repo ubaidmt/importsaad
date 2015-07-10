@@ -2,19 +2,16 @@
 	"id": 1,
 	"nombre": "Detalle de Facturas",
 	"descripcion": "Muestra el detalle de una factura.",
-	"clase": "com.importsaad.jasper.gf.DetalleFacturas",
+	"clase": "com.importsaad.jasper.gf.Facturas",
 	"plantilla": "gf/DetalleFacturas",
 	"tipo": 2,
 	"os": "ImportSaadOS",
+	"security": {
+		"everyoneelse": true
+	},		
 	"condiciones": [{ 
-		"nombre": "NumeroFolio",
-		"valor": "paramNumeroFolio",
-		"requerido": false
-		},
-		{ 
 		"nombre": "EstadoFactura",
-		"valor": "paramEstadoFactura",
-		"requerido": false
+		"valor": "paramEstadoFactura"
 		},	
 		{ 
 		"nombre": "FechaSolicitudDesde",
@@ -28,115 +25,190 @@
 		},					
 		{ 
 		"nombre": "FechaFacturaDesde",
-		"valor": "paramFechaFacturaDesde",
-		"requerido": false
+		"valor": "paramFechaFacturaDesde"
 		},	
 		{ 
 		"nombre": "FechaFacturaHasta",
-		"valor": "paramFechaFacturaHasta",
-		"requerido": false
+		"valor": "paramFechaFacturaHasta"
 		},	
 		{ 
 		"nombre": "ImporteDesde",
-		"valor": "paramImporteDesde",
-		"requerido": false
+		"valor": "paramImporteDesde"
 		},	
 		{ 
 		"nombre": "ImporteHasta",
-		"valor": "paramImporteHasta",
-		"requerido": false
+		"valor": "paramImporteHasta"
 		},		
 		{ 
-		"nombre": "NumeroFactura",
-		"valor": "paramNumeroFactura",
-		"requerido": false
-		},	
-		{ 
 		"nombre": "Proveedor",
-		"valor": "paramProveedor",
-		"requerido": false
+		"valor": "paramProveedor"		 
 		},	
 		{ 
 		"nombre": "Cliente",
-		"valor": "paramCliente",
-		"requerido": false
+		"valor": "paramCliente"
 		},	
 		{ 
 		"nombre": "Empresa",
-		"valor": "paramEmpresa",
-		"requerido": false
+		"valor": "paramEmpresa"
 		}																						
 	],
 	"parametros": [{ 
-		"nombre": "NumeroFolio",
-		"valor": "paramNumeroFolio",
-		"placeholder": true
-		},
-		{ 
 		"nombre": "EstadoFactura",
-		"valor": "paramEstadoFactura",
-		"placeholder": true
+		"valor": "paramEstadoFactura"
 		},	
 		{ 
 		"nombre": "FechaSolicitudDesde",
-		"valor": "paramFechaSolicitudDesde",
-		"placeholder": true
+		"valor": "paramFechaSolicitudDesde"
 		},	
 		{ 
 		"nombre": "FechaSolicitudHasta",
-		"valor": "paramFechaSolicitudHasta",
-		"placeholder": true
+		"valor": "paramFechaSolicitudHasta"
 		},				
 		{ 
 		"nombre": "FechaFacturaDesde",
-		"valor": "paramFechaFacturaDesde",
-		"placeholder": true
+		"valor": "paramFechaFacturaDesde"
 		},	
 		{ 
 		"nombre": "FechaFacturaHasta",
-		"valor": "paramFechaFacturaHasta",
-		"placeholder": true
+		"valor": "paramFechaFacturaHasta"
 		},	
 		{ 
 		"nombre": "ImporteDesde",
-		"valor": "paramImporteDesde",
-		"placeholder": true
+		"valor": "paramImporteDesde"
 		},	
 		{ 
 		"nombre": "ImporteHasta",
-		"valor": "paramImporteHasta",
-		"placeholder": true
+		"valor": "paramImporteHasta"
 		},		
 		{ 
-		"nombre": "NumeroFactura",
-		"valor": "paramNumeroFactura",
-		"placeholder": true
-		},	
-		{ 
 		"nombre": "Proveedor",
-		"valor": "paramProveedor",
-		"placeholder": true
+		"valor": "paramProveedor"
 		},	
 		{ 
 		"nombre": "Cliente",
-		"valor": "paramCliente",
-		"placeholder": true
+		"valor": "paramCliente"
 		},	
 		{ 
 		"nombre": "Empresa",
-		"valor": "paramEmpresa",
-		"placeholder": true
+		"valor": "paramEmpresa"
 		}																										
 	]																										
 },
 {
 	"id": 2,
+	"nombre": "Resumen de Facturas",
+	"descripcion": "Muestra el resumen de facturas solicitadas.",
+	"clase": "com.importsaad.jasper.gf.Facturas",
+	"plantilla": "gf/ResumenFacturas",
+	"tipo": 2,
+	"os": "ImportSaadOS",
+	"security": {
+		"everyoneelse": true
+	},		
+	"condiciones": [{ 
+		"nombre": "NumeroFolio",
+		"valor": "paramNumeroFolio"
+		},
+		{ 
+		"nombre": "EstadoFactura",
+		"valor": "paramEstadoFactura"
+		},	
+		{ 
+		"nombre": "FechaSolicitudDesde",
+		"valor": "paramFechaSolicitudDesde",
+		"requerido": true
+		},	
+		{ 
+		"nombre": "FechaSolicitudHasta",
+		"valor": "paramFechaSolicitudHasta",
+		"requerido": true
+		},					
+		{ 
+		"nombre": "FechaFacturaDesde",
+		"valor": "paramFechaFacturaDesde"
+		},	
+		{ 
+		"nombre": "FechaFacturaHasta",
+		"valor": "paramFechaFacturaHasta"
+		},	
+		{ 
+		"nombre": "ImporteDesde",
+		"valor": "paramImporteDesde"
+		},	
+		{ 
+		"nombre": "ImporteHasta",
+		"valor": "paramImporteHasta"
+		},		
+		{ 
+		"nombre": "Proveedor",
+		"valor": "paramProveedor"
+		},	
+		{ 
+		"nombre": "Cliente",
+		"valor": "paramCliente"
+		},	
+		{ 
+		"nombre": "Empresa",
+		"valor": "paramEmpresa"
+		}																						
+	],
+	"parametros": [{ 
+		"nombre": "NumeroFolio",
+		"valor": "paramNumeroFolio"
+		},
+		{ 
+		"nombre": "EstadoFactura",
+		"valor": "paramEstadoFactura"
+		},	
+		{ 
+		"nombre": "FechaSolicitudDesde",
+		"valor": "paramFechaSolicitudDesde"
+		},	
+		{ 
+		"nombre": "FechaSolicitudHasta",
+		"valor": "paramFechaSolicitudHasta"
+		},				
+		{ 
+		"nombre": "FechaFacturaDesde",
+		"valor": "paramFechaFacturaDesde"
+		},	
+		{ 
+		"nombre": "FechaFacturaHasta",
+		"valor": "paramFechaFacturaHasta"
+		},	
+		{ 
+		"nombre": "ImporteDesde",
+		"valor": "paramImporteDesde"
+		},	
+		{ 
+		"nombre": "ImporteHasta",
+		"valor": "paramImporteHasta"
+		},		
+		{ 
+		"nombre": "Proveedor",
+		"valor": "paramProveedor"
+		},	
+		{ 
+		"nombre": "Cliente",
+		"valor": "paramCliente"
+		},	
+		{ 
+		"nombre": "Empresa",
+		"valor": "paramEmpresa"
+		}																										
+	]																										
+},
+{
+	"id": 3,
 	"nombre": "Detalle de Pagos",
 	"descripcion": "Muestra el detalle sobre los pagos asociados a una factura.",
-	"clase": "com.importsaad.jasper.gf.DetallePagos",
+	"clase": "com.importsaad.jasper.gf.Pagos",
 	"plantilla": "gf/DetallePagos",
 	"tipo": 2,
 	"os": "ImportSaadOS",
+	"security": {
+		"everyoneelse": true
+	},		
 	"condiciones": [{ 
 		"nombre": "TipoPago",
 		"valor": "paramTipoPago",
@@ -154,100 +226,86 @@
 		},					
 		{ 
 		"nombre": "FechaPagoDesde",
-		"valor": "paramFechaPagoDesde",
-		"requerido": false
+		"valor": "paramFechaPagoDesde"
 		},	
 		{ 
 		"nombre": "FechaPagoHasta",
-		"valor": "paramFechaPagoHasta",
-		"requerido": false
+		"valor": "paramFechaPagoHasta"
 		},	
 		{ 
 		"nombre": "ImporteDesde",
-		"valor": "paramImporteDesde",
-		"requerido": false
+		"valor": "paramImporteDesde"
 		},	
 		{ 
 		"nombre": "ImporteHasta",
-		"valor": "paramImporteHasta",
-		"requerido": false
+		"valor": "paramImporteHasta"
 		},		
 		{ 
 		"nombre": "Proveedor",
-		"valor": "paramProveedor",
-		"requerido": false
+		"valor": "paramProveedor"
 		},	
 		{ 
 		"nombre": "Cliente",
-		"valor": "paramCliente",
-		"requerido": false
+		"valor": "paramCliente"
 		},	
 		{ 
 		"nombre": "Empresa",
-		"valor": "paramEmpresa",
-		"requerido": false
+		"valor": "paramEmpresa"
 		}																						
 	],
 	"parametros": [{ 
 		"nombre": "TipoPago",
-		"valor": "paramTipoPago",
-		"placeholder": true
+		"valor": "paramTipoPago"
 		},
 		{ 
 		"nombre": "FechaSolicitudDesde",
-		"valor": "paramFechaSolicitudDesde",
-		"placeholder": true
+		"valor": "paramFechaSolicitudDesde"
 		},	
 		{ 
 		"nombre": "FechaSolicitudHasta",
-		"valor": "paramFechaSolicitudHasta",
-		"placeholder": true
+		"valor": "paramFechaSolicitudHasta"
 		},				
 		{ 
 		"nombre": "FechaPagoDesde",
-		"valor": "paramFechaPagoDesde",
-		"placeholder": true
+		"valor": "paramFechaPagoDesde"
 		},	
 		{ 
 		"nombre": "FechaPagoHasta",
-		"valor": "paramFechaPagoHasta",
-		"placeholder": true
+		"valor": "paramFechaPagoHasta"
 		},	
 		{ 
 		"nombre": "ImporteDesde",
-		"valor": "paramImporteDesde",
-		"placeholder": true
+		"valor": "paramImporteDesde"
 		},	
 		{ 
 		"nombre": "ImporteHasta",
-		"valor": "paramImporteHasta",
-		"placeholder": true
+		"valor": "paramImporteHasta"
 		},			
 		{ 
 		"nombre": "Proveedor",
-		"valor": "paramProveedor",
-		"placeholder": true
+		"valor": "paramProveedor"
 		},	
 		{ 
 		"nombre": "Cliente",
-		"valor": "paramCliente",
-		"placeholder": true
+		"valor": "paramCliente"
 		},	
 		{ 
 		"nombre": "Empresa",
-		"valor": "paramEmpresa",
-		"placeholder": true
+		"valor": "paramEmpresa"
 		}																										
 	]																										
 },
 {
-	"id": 3,
+	"id": 4,
 	"nombre": "Detalle de Devoluciones",
 	"descripcion": "Muestra el detalle sobre las devoluciones asociados a una factura.",
-	"clase": "com.importsaad.jasper.gf.DetalleDevoluciones",
+	"clase": "com.importsaad.jasper.gf.Devoluciones",
 	"plantilla": "gf/DetalleDevoluciones",
 	"tipo": 2,
 	"os": "ImportSaadOS",
+	"security": {
+		"everyoneelse": true
+	},		
 	"condiciones": [{ 
 		"nombre": "TipoDevolucion",
 		"valor": "paramTipoDevolucion",
@@ -265,89 +323,72 @@
 		},						
 		{ 
 		"nombre": "ImporteDesde",
-		"valor": "paramImporteDesde",
-		"requerido": false
+		"valor": "paramImporteDesde"
 		},	
 		{ 
 		"nombre": "ImporteHasta",
-		"valor": "paramImporteHasta",
-		"requerido": false
+		"valor": "paramImporteHasta"
 		},		
 		{ 
 		"nombre": "Proveedor",
-		"valor": "paramProveedor",
-		"requerido": false
+		"valor": "paramProveedor"
 		},	
 		{ 
 		"nombre": "Cliente",
-		"valor": "paramCliente",
-		"requerido": false
+		"valor": "paramCliente"
 		},	
 		{ 
 		"nombre": "Empresa",
-		"valor": "paramEmpresa",
-		"requerido": false
+		"valor": "paramEmpresa"
 		},
 		{ 
 		"nombre": "EstadoSaldo",
-		"valor": "paramEstadoSaldo",
-		"requerido": false
+		"valor": "paramEstadoSaldo"
 		},
 		{ 
 		"nombre": "EstadoDevolucion",
-		"valor": "paramEstadoDevolucion",
-		"requerido": false
+		"valor": "paramEstadoDevolucion"
 		}																											
 	],
 	"parametros": [{ 
 		"nombre": "TipoDevolucion",
-		"valor": "paramTipoDevolucion",
-		"placeholder": true
+		"valor": "paramTipoDevolucion"
 		},
 		{ 
 		"nombre": "FechaSolicitudDesde",
-		"valor": "paramFechaSolicitudDesde",
-		"placeholder": true
+		"valor": "paramFechaSolicitudDesde"
 		},	
 		{ 
 		"nombre": "FechaSolicitudHasta",
-		"valor": "paramFechaSolicitudHasta",
-		"placeholder": true
+		"valor": "paramFechaSolicitudHasta"
 		},				
 		{ 
 		"nombre": "ImporteDesde",
-		"valor": "paramImporteDesde",
-		"placeholder": true
+		"valor": "paramImporteDesde"
 		},	
 		{ 
 		"nombre": "ImporteHasta",
-		"valor": "paramImporteHasta",
-		"placeholder": true
+		"valor": "paramImporteHasta"
 		},			
 		{ 
 		"nombre": "Proveedor",
-		"valor": "paramProveedor",
-		"placeholder": true
+		"valor": "paramProveedor"
 		},	
 		{ 
 		"nombre": "Cliente",
-		"valor": "paramCliente",
-		"placeholder": true
+		"valor": "paramCliente"
 		},	
 		{ 
 		"nombre": "Empresa",
-		"valor": "paramEmpresa",
-		"placeholder": true
+		"valor": "paramEmpresa"
 		},
 		{ 
 		"nombre": "EstadoSaldo",
-		"valor": "paramEstadoSaldo",
-		"placeholder": true
+		"valor": "paramEstadoSaldo"
 		},
 		{ 
 		"nombre": "EstadoDevolucion",
-		"valor": "paramEstadoDevolucion",
-		"placeholder": true
+		"valor": "paramEstadoDevolucion"
 		}																																
 	]																										
 }

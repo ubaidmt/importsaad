@@ -1,32 +1,24 @@
 package test;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 
 import javax.security.auth.Subject;
 
 import com.filenet.api.collection.DocumentSet;
-import com.filenet.api.constants.AutoUniqueName;
-import com.filenet.api.constants.DefineSecurityParentage;
 import com.filenet.api.constants.RefreshMode;
 import com.filenet.api.core.Connection;
 import com.filenet.api.core.Factory;
 import com.filenet.api.core.ObjectStore;
 import com.filenet.api.core.Document;
-import com.filenet.api.core.Folder;
-import com.filenet.api.core.ReferentialContainmentRelationship;
-import com.filenet.api.exception.EngineRuntimeException;
 import com.filenet.api.query.SearchSQL;
 import com.filenet.api.query.SearchScope;
-import com.filenet.api.util.Id;
 import com.filenet.api.util.UserContext;
 import com.ibm.json.java.JSONObject;
 import com.ibm.ecm.extension.service.ContentService;
-import com.ibm.ecm.extension.service.SolDocService;
-import com.ibm.ecm.extension.service.SolDocPagosService;
+import com.ibm.ecm.extension.util.cipher.CipherUtil;
+import com.ibm.ecm.extension.util.mail.MailService;
 import com.ibm.json.java.JSONArray;
 
 public class TestHarness {
@@ -38,10 +30,11 @@ public class TestHarness {
 	private static final String stanza = "FileNetP8WSI";
 	private static final String osName = "ImportSaadOS";
 	//private static final String osName = "GestionDocsOS";
+	private static final String stringKey = "pxtHnTBIdxE0vOvuQ5fAEQ=="; // AES-compliant string key		
 
 	public static void main(String[] args) {
 		TestHarness th = new TestHarness();
-		th.updatePropertyDefinition();
+		th.testJsonToString();
 	}
 	
 	public void getBinaryData() {
@@ -92,29 +85,6 @@ public class TestHarness {
 		}	
 	}
 	
-	public void deleteEstructuraSubCarpetas() {
-		try
-		{
-    		Connection con = Factory.Connection.getConnection(server);
-    	    Subject subject = UserContext.createSubject(con, user, password, stanza);
-    	    UserContext.get().pushSubject(subject); 
-    	    ObjectStore os = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), osName, null);	
-    	    
-    	    Folder cliente = Factory.Folder.fetchInstance(os, "/Facturas/EXCELECM TECHNOLOGY S.A. DE C.V. 2", null);
-    	    SolDocService.eliminaEstructuraSubCarpetas(os, cliente);  	    
-		    cliente.delete();
-		    cliente.save(RefreshMode.REFRESH);
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		} 
-		finally 
-		{
-			UserContext.get().popSubject();
-		}		
-	}
-	
 	@SuppressWarnings("unchecked")
 	public void setSaldoDevoluciones() {
 		try
@@ -148,51 +118,6 @@ public class TestHarness {
 			UserContext.get().popSubject();
 		}		
 	}	
-	
-	public void cloneDocument() {
-		Map<Id, Document> pagosClonadosMap = new HashMap<Id, Document>();
-		
-		try
-		{
-    		Connection con = Factory.Connection.getConnection(server);
-    	    Subject subject = UserContext.createSubject(con, user, password, stanza);
-    	    UserContext.get().pushSubject(subject); 
-    	    ObjectStore os = Factory.ObjectStore.fetchInstance(Factory.Domain.getInstance(con,null), osName, null);	
-    	    
-			// Get temp folder
-			Folder temp = null;
-			try {
-				temp = Factory.Folder.fetchInstance(os, "/Temporal/Documentos", null);	
-			} catch (EngineRuntimeException ere) {
-				throw new RuntimeException ("El folder temporal no fue localizado.");		
-			}    	    
-    	    
-			Map<String, Object> propsMap = new HashMap<String, Object>();
-			Document pago = Factory.Document.fetchInstance(os, "{B026054B-0000-C910-9087-C8347CB7F128}", null);
-			com.filenet.api.property.Properties props = pago.getProperties();
-			propsMap.put("MontoTotal", props.getObjectValue("MontoTotal"));
-			propsMap.put("FechaPago", props.getObjectValue("FechaPago"));
-			propsMap.put("MetodoPago", props.getObjectValue("MetodoPago"));
-			propsMap.put("Referencia", props.getObjectValue("Referencia"));
-			propsMap.put("TipoPago", 2); // Pago a Cliente
-			propsMap.put("Banco", props.getObjectValue("Banco"));
-			propsMap.put("Proveedor", props.getObjectValue("Proveedor"));
-			propsMap.put("Empresa", props.getObjectValue("Empresa"));					
-			Document pagoClonado = SolDocPagosService.cloneDocument(os, pago.getClassName(), pago, "Pago a Cliente", propsMap, "{A629E2CF-F9C7-43F9-89F3-19D017314E55}");
-			pagosClonadosMap.put(pago.get_Id(), pagoClonado);	
-			
-			ReferentialContainmentRelationship rel = temp.file(pagoClonado, AutoUniqueName.AUTO_UNIQUE, pagoClonado.get_Name(), DefineSecurityParentage.DO_NOT_DEFINE_SECURITY_PARENTAGE);
-			rel.save(RefreshMode.NO_REFRESH);				
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		} 
-		finally 
-		{
-			UserContext.get().popSubject();
-		}	
-	}
 	
 	@SuppressWarnings("rawtypes")
 	public void updatePropertyDefinition() {
@@ -255,5 +180,104 @@ public class TestHarness {
 		}	    	    
     	    
 	}
+	
+	public void testCipher() {
+		
+		String mensaje = "filenet";
+
+		try {
+			System.out.println("Mensaje: " + mensaje);
+			javax.crypto.SecretKey key = CipherUtil.getSecretKey(stringKey);
+			System.out.println("stringkey: " + CipherUtil.getStringKey(key));
+			String encrypted = CipherUtil.encrypt(mensaje, key);
+			System.out.println("encrypted: " + encrypted);
+			String decrypted = CipherUtil.decrypt(encrypted, key);
+			System.out.println("decrypted: " + decrypted);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}    	
+	}	
+	
+	public void testJsonToString() {
+		try
+		{
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("01", "Efectivo");
+			jsonObject.put("03", "Transferencia de fondos electrónicos");
+			
+			// convert to readable mode
+			String value = "";
+			for (Object obj : jsonObject.keySet()) {
+				String key = (String) obj;
+				value += jsonObject.get(key) + " (" + key + "), ";
+			}
+			if (value.length() > 0)
+				value = value.substring(0, value.length() - 2);
+			System.out.println(value);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}   
+	}
+	
+	public void sendMail() {
+
+		try
+		{
+			// yahoo mail
+//			String emailHost = "smtp.mail.yahoo.com";
+//			long emailPort = 587;
+//			String emailFrom = "almaceneseloverol@yahoo.com";
+//			String emailAlias = "Almacenes el Overol";
+//			String emailUser = "almaceneseloverol@yahoo.com";
+//			String emailPassword = "denver1013";
+			
+//			// hotmail
+//			String emailHost = "smtp.live.com";
+//			long emailPort = 587;
+//			String emailFrom = "solucionas@hotmail.com";
+//			String emailAlias = "Administrador de Documentos";
+//			String emailUser = "solucionas@hotmail.com";
+//			String emailPassword = "oso@02175";			
+			
+			// gmail
+//			String emailHost = "smtp.gmail.com";
+//			long emailPort = 587;
+//			String emailFrom = "juansaad78@gmail.com";
+//			String emailAlias = "Juan Saad";
+//			String emailUser = "juansaad78@gmail.com";
+//			String emailPassword = "denver1013";
+			
+			// aws
+			String emailHost = "email-smtp.us-east-1.amazonaws.com";
+			long emailPort = 587;			
+			String emailFrom = "info@excelecm.com";
+			String emailAlias = "ExcelECM Technology";	
+			String emailUser = "AKIAI2NMQEQ6UTALKDPQ";
+			String emailPassword = "Av7Z4PqdF4pAVAg/GCtlZvmFWOspuNK6dRfn9Beksc0r";
+
+			// email to
+			String emailTo = "juansaad78@gmail.com";
+			
+			JSONObject mailSettings = new JSONObject();
+			mailSettings.put("starttls", Boolean.TRUE);
+			mailSettings.put("emailHost", emailHost);
+			mailSettings.put("emailPort", emailPort);
+			mailSettings.put("emailFrom", emailFrom);
+			mailSettings.put("emailAlias", emailAlias);
+			mailSettings.put("emailUser", emailUser);
+			mailSettings.put("emailPassword", emailPassword);
+			MailService mailService = new MailService(mailSettings);
+
+			System.out.println("Enviado correo de " + emailFrom + " para " + emailTo + " ...");
+			String body = "<html><body>Prueba de correo...</body></html>";
+			mailService.sendEmail(emailTo, null, null, null, "Prueba", body, new ArrayList<String>(), new ArrayList<String>());
+			System.out.println("Mail enviado!!");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}	
 
 }

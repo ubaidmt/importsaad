@@ -5,7 +5,6 @@ import java.util.Iterator;
 import com.excelecm.common.service.CEService;
 import com.excelecm.common.settings.ConfigurationSettings;
 import com.excelecm.common.settings.ContentEngineSettings;
-import com.excelecm.common.util.CommonUtils;
 import com.filenet.api.collection.RepositoryRowSet;
 import com.filenet.api.query.RepositoryRow;
 import com.ibm.json.java.JSONArray;
@@ -13,7 +12,7 @@ import com.ibm.json.java.JSONObject;
 
 public class SolDocEmpresas {
 	
-	public static JSONObject getData(String propertyName, JSONArray choices, String initialValue, boolean isRequired) throws Exception {
+	public static JSONObject getData(String propertyName, JSONArray choices, Object initialValue, boolean isRequired) throws Exception {
 		
 		JSONObject result = new JSONObject();
 		JSONObject jsonObj = new JSONObject();		
@@ -29,7 +28,7 @@ public class SolDocEmpresas {
 	    	result.put("choiceList", jsonObj);
 	    	result.put("hasDependentProperties", false);
 	    	
-	    	if (!CommonUtils.isEmtpy(initialValue))	    	
+	    	if (initialValue != null)	  	
 	    		result.put("value", initialValue);
         	if (isRequired)
         		result.put("required", true);
