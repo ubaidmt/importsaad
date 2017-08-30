@@ -449,4 +449,12 @@ public class ContentService {
 		return list;
 	}
 	
+	public static ContentTransfer getContentTransfer(Document doc, int contentElement) throws Exception {
+		ContentTransfer ct = null;
+		ContentElementList cel = doc.get_ContentElements();
+    		if (cel.size() >= contentElement)
+    			ct = (ContentTransfer) cel.get(contentElement);
+    		return ct;
+	}		
+	
 }

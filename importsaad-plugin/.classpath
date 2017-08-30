@@ -8,5 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache Commons"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Mail"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/WASLibery"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ExcelECM Commons"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
