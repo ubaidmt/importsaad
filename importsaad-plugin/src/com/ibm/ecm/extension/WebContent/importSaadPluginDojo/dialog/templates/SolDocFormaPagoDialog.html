@@ -1,0 +1,68 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+    <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+        <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title"
+              role="header" level="1"></span>
+        <span style="display: none;" data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+              data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabIndex="-1">
+            <span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+        </span>
+    </div>
+    <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent" style="width:100%;height:100%;">
+        <div data-dojo-type="dijit.layout.ContentPane" style="width:300px;height:250px;" data-dojo-props="region:'top'">          
+			<table width="100%">
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="efectivo" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Efectivo</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="chequeNominativo" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Cheque nominativo</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="transferenciaElectronica" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Transferencia electr&oacute;nica de fondos</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="tarjetaCredito" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Tarjeta de cr&eacute;dito</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="monederoElectronico" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Monedero electr&oacute;nico</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="dineroElectronico" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Dinero electr&oacute;nico</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="valesDespensa" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Vales de despensa</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="tarjetaDebito" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Tarjeta de d&eacute;bito</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="tarjetaServicio" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Tarjeta de servicio</td>
+				</tr>	
+				<tr>
+                    <td width="1%"><div data-dojo-type="ecm.widget.CheckBox" data-dojo-attach-point="otros" value="true" data-dojo-props="checked: false"></td>	  
+                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"> Otros</td>
+				</tr>	                
+			</table>			
+   		</div>
+    	<div data-dojo-type="dijit.layout.ContentPane" style="width:300px;height:30px;" data-dojo-props="region:'bottom'">
+			<table width="100%" style="background-color:#FFFFFF;">
+				<tr>
+					<td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+    <div class="dijitDialogPaneActionBar">
+    	<button data-dojo-attach-point="confirmButton" data-dojo-type="dijit.form.Button">Confirmar</button>
+        <button data-dojo-attach-point="cleanButton" data-dojo-type="dijit.form.Button">Limpiar</button>
+        <button data-dojo-attach-point="closeButton" data-dojo-type="dijit.form.Button">Cerrar</button>
+    </div>      	
+</div>

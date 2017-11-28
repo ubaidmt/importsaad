@@ -1,0 +1,30 @@
+<div data-dojo-type="dijit.layout.ContentPane" style="height:100%;">
+    <div data-dojo-type="dijit.layout.ContentPane">    
+        <table style="width:100%;">
+            <tr>
+                <td style="width:50%;text-align:left;font-family:arial;font-size:12px;font-weight:normal;color:#353C44;">Criterios de consulta</td>
+                <td style="width:50%;text-align:right;"><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">M&aacute;ximo de resultados (1-9999): </label><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="maxResults" style="width: 50px;" maxlength="4" value="50" required="true" data-dojo-props="constraints: {max: 9999, maxString: '9999', min: 1, minString: '1'}, pattern: '^[0-9]*$', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>
+            </tr>	  	
+        </table>
+        <table style="width:100%;">
+            <tr>
+                <td style="width:20%;text-align:right;font-family:arial;font-size:12px;font-weight:normal;color:#000000;">Clave: </td>
+                <td style="width:30%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100px;" data-dojo-attach-point="clave" maxlength="10" data-dojo-props="regExp:'^[a-zA-Z0-9]*$', invalidMessage:'Formato Inv&aacute;lido.'"></div></td>                                  
+                <td style="width:20%;text-align:right;font-family:arial;font-size:12px;font-weight:normal;color:#000000;">Descripci&oacute;n: </td>
+                <td style="width:30%;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 300px;" data-dojo-attach-point="name" maxlength="64" uppercase="true"></div></td>
+            </tr>
+        </table>        
+    </div>
+    <br>
+    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="gridArea" style="height:77%;">
+        <div data-dojo-attach-point="gridDiv" style="width:100%;height:100%;"></div>			
+    </div>  
+    <br>
+    <div data-dojo-type="dijit.layout.ContentPane" style="border-top:1px solid #cdced2;">    
+        <table style="width:100%;padding-top:5px;">
+            <tr>
+                <td><div data-dojo-attach-point="progressBar" style="float:left;width:30px;height:15px;background:url('/navigator/ecm/themes/oneui/dijit/images/loadingAnimation.gif')  no-repeat center;display:none;"></div><div data-dojo-attach-point="message" style="font-family:arial;font-size:12px;font-weight:bold;color:#6B0A0A;float:left;"></div></td>
+            </tr>
+        </table>
+    </div>
+</div>
