@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/_base/connect",	
+	"dojo/on",
 	"ecm/model/Request",
 	"ecm/widget/dialog/BaseDialog",
 	"dijit/form/Button",
@@ -17,10 +17,12 @@ define([
 	"dojo/data/ObjectStore",
 	"dojo/store/Memory",	
 	"ecm/model/Desktop",
-	"importSaadPluginDojo/dialog/SolDocMetodosPagoDialog",
+	"importSaadPluginDojo/dialog/SolDocFormaPagoDialog",
+	"importSaadPluginDojo/dialog/SolDocBuscarProdServDialog",
+	"importSaadPluginDojo/dialog/SolDocBuscarUniMedDialog",	
 	"dojo/text!./templates/SolDocEditarFacturaDialog.html"
 	],
-	function (declare, lang, connect, Request, BaseDialog, Button, Select, array, json, dom, domStyle, domGeom, DataGrid, timing, ItemFileWriteStore, ObjectStore, Memory, Desktop, SolDocMetodosPagoDialog, template) {
+	function (declare, lang, on, Request, BaseDialog, Button, Select, array, json, dom, domStyle, domGeom, DataGrid, timing, ItemFileWriteStore, ObjectStore, Memory, Desktop, SolDocFormaPagoDialog, SolDocBuscarProdServDialog, SolDocBuscarUniMedDialog, template) {
 	
 	/**
 	 * @name importSaadPluginDojo.action.SolDocEditarFacturaDialog
@@ -107,7 +109,7 @@ define([
 			this.ticker = new dojox.timing.Timer();
 			this.ticker.setInterval(interval);
 
-			connect.connect(this.ticker, "onTick", lang.hitch(this, function() {
+			on(this.ticker, "tick", lang.hitch(this, function() {
 				this.sendDummyRequest();
 			}));	
 			
@@ -141,31 +143,37 @@ define([
 
 			this.loadDatosFactura();
 			
-			//if (this.isAdminUser) {
-				domStyle.set(this.comisionesPane, "display", "block");
-				this.porcentajeComisionProveedor.required = true;
-				this.porcentajeComisionDistribuidor.required = true;
-			//}	
+			domStyle.set(this.comisionesPane, "display", "block");
+			this.porcentajeComisionProveedor.required = true;
+			this.porcentajeComisionDistribuidor.required = true;	
 			
-			connect.connect(this.refreshButton, "onClick", lang.hitch(this, function() {
+			on(this.refreshButton, "click", lang.hitch(this, function() {
 				this.onRefresh(true);
 			}));			
 			
-			connect.connect(this.porcentajeComisionProveedor, "onChange", lang.hitch(this, function() {
+			on(this.porcentajeComisionProveedor, "change", lang.hitch(this, function() {
 				this.setMontosComision();
 			}));
 			
-			connect.connect(this.porcentajeComisionDistribuidor, "onChange", lang.hitch(this, function() {
+			on(this.porcentajeComisionDistribuidor, "change", lang.hitch(this, function() {
 				this.setMontosComision();
 			}));	
 			
-			connect.connect(this.radioPDF, "onChange", lang.hitch(this, function() {
+			on(this.radioPDF, "change", lang.hitch(this, function() {
 				this.checkFileButtons();
 			}));	
 			
-			connect.connect(this.radioXML, "onChange", lang.hitch(this, function() {
+			on(this.radioXML, "change", lang.hitch(this, function() {
 				this.checkFileButtons();
 			}));
+			
+			on(this.searchProdServ, "click", lang.hitch(this, function() {
+				this.onProdServSearch();
+			}));
+			
+			on(this.searchUniMed, "click", lang.hitch(this, function() {
+				this.onUniMedSearch();
+			}));					
 						
 		},	
 
@@ -215,10 +223,12 @@ define([
 							this.estadoFactura.innerHTML = this.formatEstadoCFDI(solicitud.estado);
 							this.loadConceptos(solicitud.datos.conceptos);
 							
+							this.metodoPago.setValue(solicitud.datos.metodoPago2);
+							this.usoCFDI.setValue(solicitud.datos.usoCFDI);
 							this.porcentajeComisionProveedor.setValue(solicitud.datos.porcentajeComisionProveedor);
 							this.porcentajeComisionDistribuidor.setValue(solicitud.datos.porcentajeComisionDistribuidor);
 							if ("metodoPago" in solicitud.datos) this.metodosPago = json.parse(solicitud.datos.metodoPago);
-							this.setMetodoPago();
+							this.setFormaPago();
 							this.numeroCuenta.setValue("numeroCuenta" in solicitud.datos ? solicitud.datos.numeroCuenta : "");
 							
 							this.setMontosFactura();
@@ -323,11 +333,14 @@ define([
 		
 			var gridLayout = [
 				{name: 'Id', field: 'id', width: '3%', editable: false},
-				{name: 'Descripción', field: 'conceptoDescripcion', width: '40%', editable: false},
-				{name: 'Unidad', field: 'conceptoUnidad', width: '15%', editable: false},			
-				{name: 'Cantidad', field: 'conceptoCantidad', width: '15%', editable: false},
-				{name: 'Precio Unitario', field: 'conceptoPrecioUnitario', width: '15%', editable: false, formatter: this.formatCurrency},
-				{name: 'Importe', field: 'conceptoImporte', width: '15%', editable: false, formatter: this.formatCurrency}
+				{name: 'Descripción', field: 'conceptoDescripcion', width: '35%', editable: false},
+				{name: 'Clave', field: 'conceptoClave', width: '10%', editable: false},
+				{name: 'ProdServ', field: 'conceptoProdServ', width: '15%', editable: false},
+				{name: 'Unidad', field: 'conceptoUnidad', width: '10%', editable: false},
+				{name: 'UniMed', field: 'conceptoUniMed', width: '10%', editable: false},
+				{name: 'Cantidad', field: 'conceptoCantidad', width: '10%', editable: false},
+				{name: 'Unitario', field: 'conceptoPrecioUnitario', width: '10%', editable: false, formatter: this.formatCurrency},
+				{name: 'Importe', field: 'conceptoImporte', width: '10%', editable: false, formatter: this.formatCurrency}				
 			];
 			
 			this.grid = new DataGrid({
@@ -343,11 +356,11 @@ define([
 			this.grid.startup();
 
 			// set events
-			connect.connect(this.grid, "onClick", lang.hitch(this, function() {
+			on(this.grid, "click", lang.hitch(this, function() {
 				this.onGridItemSelect();
 			}));			
 			
-			connect.connect(this.grid, "onStyleRow", lang.hitch(this, function(row) {
+			on(this.grid, "stylerow", lang.hitch(this, function(row) {
 				var item = this.grid.getItem( row.index );
 				if ( item == null ) return;
 				if (row.odd) row.customStyles += 'background-color:#F7F6F6;';
@@ -419,7 +432,10 @@ define([
 			if (items.length > 0) {
 				var item = items[items.length-1]; // select last
 				this.conceptoDescripcion.setValue(item.conceptoDescripcion.toString());
+				this.conceptoClave.setValue(item.conceptoClave.toString());
+				this.conceptoProdServ.setValue(item.conceptoProdServ.toString());
 				this.conceptoUnidad.setValue(item.conceptoUnidad.toString());
+				this.conceptoUniMed.setValue(item.conceptoUniMed.toString());
 				this.conceptoCantidad.setValue(item.conceptoCantidad.toString());
 				this.conceptoPrecioUnitario.setValue(item.conceptoPrecioUnitario.toString());					
 			}		
@@ -546,8 +562,10 @@ define([
 						"porcentajeComisionDistribuidor": parseFloat(this.porcentajeComisionDistribuidor.getValue()),
 						"montoComisionDistribuidor": this.parseFloat(this.montoComisionDistribuidor.innerHTML),
 						"metodoPago": json.stringify(this.metodosPago),
-						"numeroCuenta": this.numeroCuenta.getValue(),						
-						"conceptos": this.getConceptosItems(),
+						"numeroCuenta": this.numeroCuenta.getValue(),
+						"metodoPago2": this.metodoPago.getValue(),
+						"usoCFDI": this.usoCFDI.getValue(),						
+						"conceptos": this.getConceptos(),
 						"filePDF": this.filePDF,
 						"fileXML": this.fileXML					
 					};
@@ -986,14 +1004,44 @@ define([
 				}
 				
 			}));
-		},			
+		},	
 		
-		onSelectMetodoPago: function() {
-			var dialog = new SolDocMetodosPagoDialog({
-				title: "Método de Pago",
+		onProdServSearch: function() {
+			var dialog = new SolDocBuscarProdServDialog({
+				onConfirm: lang.hitch(this, function() {
+					var items = dialog.grid.selection.getSelected();
+					dialog.hide();
+					if (items.length > 0) {
+						var item = items[items.length-1]; // select last
+						this.conceptoProdServ.setValue(item.clave.toString());
+					}
+				})
+			});
+			dialog.setConfig(this.config.context);
+			dialog.show();					
+		},
+		
+		onUniMedSearch: function() {
+			var dialog = new SolDocBuscarUniMedDialog({
+				onConfirm: lang.hitch(this, function() {
+					var items = dialog.grid.selection.getSelected();
+					dialog.hide();
+					if (items.length > 0) {
+						var item = items[items.length-1]; // select last
+						this.conceptoUniMed.setValue(item.clave.toString());
+					}
+				})
+			});
+			dialog.setConfig(this.config.context);
+			dialog.show();				
+		},		
+		
+		onSelectFormaPago: function() {
+			var dialog = new SolDocFormaPagoDialog({
+				title: "Forma de Pago",
 				onConfirm: lang.hitch(this, function() {
 					this.metodosPago = dialog.getData();
-					this.setMetodoPago();
+					this.setFormaPago();
 					dialog.hide();
 				})
 			});
@@ -1001,18 +1049,18 @@ define([
 			dialog.show();					
 		},
 		
-		setMetodoPago: function() {
+		setFormaPago: function() {
 			var metodosPago = "";
 			for (key in this.metodosPago) {
 				metodosPago += this.metodosPago[key] + " (" + key + "), ";
 			}
 			if (metodosPago.length > 0) metodosPago = metodosPago.slice(0, -2); 
-			this.metodosPagoDisplay.innerHTML = metodosPago;			
+			this.formaPagoDisplay.innerHTML = metodosPago;			
 		},
 
 		onConceptoAdd: function() {
 			
-			if (!this.conceptoDescripcion.isValid() || !this.conceptoUnidad.isValid() || !this.conceptoCantidad.isValid() || !this.conceptoPrecioUnitario.isValid()) {
+			if (!this.conceptoDescripcion.isValid() || !this.conceptoClave.isValid() || !this.conceptoProdServ.isValid() || !this.conceptoUnidad.isValid() || !this.conceptoUniMed.isValid() || !this.conceptoCantidad.isValid() || !this.conceptoPrecioUnitario.isValid()) {
 				domStyle.set(this.message, "color", "#6B0A0A");
 				this.message.innerHTML = "Datos inválidos.";
 				return;	
@@ -1022,7 +1070,7 @@ define([
 			var cantidad = parseFloat(this.conceptoCantidad.getValue());
 			var conceptoImporte = precioUnitario * cantidad;
 			
-			var concepto = {"id": this.gridId++, "conceptoDescripcion": this.conceptoDescripcion.getValue(), "conceptoUnidad": this.conceptoUnidad.getValue(), "conceptoCantidad": cantidad, "conceptoPrecioUnitario": precioUnitario, "conceptoImporte": conceptoImporte};
+			var concepto = {"id": this.gridId++, "conceptoDescripcion": this.conceptoDescripcion.getValue(), "conceptoClave": this.conceptoClave.getValue(), "conceptoProdServ": this.conceptoProdServ.getValue(), "conceptoUnidad": this.conceptoUnidad.getValue(), "conceptoUniMed": this.conceptoUniMed.getValue(), "conceptoCantidad": cantidad, "conceptoPrecioUnitario": precioUnitario, "conceptoImporte": conceptoImporte};
 			this.grid.store.newItem(concepto);
 			this.grid.render();
 			this.resetConceptosValues();
@@ -1031,19 +1079,29 @@ define([
 			
 		},
 		
-		getConceptosItems: function() {
-			var jsonConceptos = [];				
-			for (var i = 0; i < this.grid.rowCount; i++) {
-				var item = this.grid.getItem(i);
-				var concepto = {"id": this.grid.store.getValue(item, "id"), "conceptoDescripcion": this.grid.store.getValue(item, "conceptoDescripcion"), "conceptoUnidad": this.grid.store.getValue(item, "conceptoUnidad"), "conceptoCantidad": this.grid.store.getValue(item, "conceptoCantidad"), "conceptoPrecioUnitario": this.grid.store.getValue(item, "conceptoPrecioUnitario"), "conceptoImporte": this.grid.store.getValue(item, "conceptoImporte")};
-				jsonConceptos.push(concepto);
-			}
-			return jsonConceptos;
+		getConceptos: function() {
+			var conceptos = [];
+			this.grid.store.fetch({
+				onItem: lang.hitch(this, function(item) {
+					var concepto = {};
+					concepto.id = item.id.toString();
+					concepto.conceptoDescripcion = item.conceptoDescripcion.toString();
+					concepto.conceptoClave = item.conceptoClave.toString();
+					concepto.conceptoProdServ = item.conceptoProdServ.toString();
+					concepto.conceptoUnidad = item.conceptoUnidad.toString();
+					concepto.conceptoUniMed = item.conceptoUniMed.toString();
+					concepto.conceptoCantidad = parseInt(item.conceptoCantidad.toString());
+					concepto.conceptoPrecioUnitario = parseFloat(item.conceptoPrecioUnitario.toString());
+					concepto.conceptoImporte = parseFloat(item.conceptoImporte.toString());
+					conceptos.push(concepto);
+				})
+			});
+			return conceptos;
 		},		
 		
 		onConceptoUpdate: function() {
 			
-			if (!this.conceptoDescripcion.isValid() || !this.conceptoUnidad.isValid() || !this.conceptoCantidad.isValid() || !this.conceptoPrecioUnitario.isValid()) {
+			if (!this.conceptoDescripcion.isValid() || !this.conceptoClave.isValid() || !this.conceptoProdServ.isValid() || !this.conceptoUnidad.isValid() || !this.conceptoUniMed.isValid() || !this.conceptoCantidad.isValid() || !this.conceptoPrecioUnitario.isValid()) {
 				domStyle.set(this.message, "color", "#6B0A0A");
 				this.message.innerHTML = "Datos inválidos.";
 				return;	
@@ -1059,7 +1117,10 @@ define([
 			
 			array.forEach(items, lang.hitch(this, function(item) {
 				this.grid.store.setValue(item, "conceptoDescripcion", this.conceptoDescripcion.getValue());
+				this.grid.store.setValue(item, "conceptoClave", this.conceptoClave.getValue());
+				this.grid.store.setValue(item, "conceptoProdServ", this.conceptoProdServ.getValue());
 				this.grid.store.setValue(item, "conceptoUnidad", this.conceptoUnidad.getValue());
+				this.grid.store.setValue(item, "conceptoUniMed", this.conceptoUniMed.getValue());
 				this.grid.store.setValue(item, "conceptoCantidad", cantidad);
 				this.grid.store.setValue(item, "conceptoPrecioUnitario", precioUnitario);
 				this.grid.store.setValue(item, "conceptoImporte", conceptoImporte);
@@ -1090,7 +1151,10 @@ define([
 
 		resetConceptosValues: function() {
 			this.conceptoDescripcion.reset();
+			this.conceptoClave.reset();
+			this.conceptoProdServ.reset();
 			this.conceptoUnidad.reset();
+			this.conceptoUniMed.reset();
 			this.conceptoCantidad.reset();
 			this.conceptoPrecioUnitario.reset();
 			this.progressBar.style.display = "none";

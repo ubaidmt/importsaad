@@ -40,17 +40,51 @@
 		  			<td style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="estadoFactura"></div></td>
 				</tr>
 			</table>
-            <table width="100%" border="0" style="background-color:#FFFFFF;">
+            <table width="100%" border="0" style="background-color:#FFFFFF;">	 															
                 <tr>
-                    <td width="30%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">M&eacute;todo de Pago:</label></td>
-                    <td width="10%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><button data-dojo-attach-point="selectMetodoPagoButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onSelectMetodoPago">SELECCIONAR</button></td>
-                    <td width="60%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="metodosPagoDisplay"></div></td>	            
+                    <td width="30%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Forma de Pago:</label></td>
+                    <td width="10%" style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><button data-dojo-attach-point="selectFormaPagoButton" data-dojo-type="dijit.form.Button" data-dojo-attach-event="onClick: onSelectFormaPago">SELECCIONAR</button></td>
+                    <td width="10%" align="left" style="font-family:arial;font-size:12px;font-weight:bold;color:black;"><div data-dojo-attach-point="formaPagoDisplay"></div></td>
+                    <td width="10%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">M&eacute;todo de Pago:</label></td>
+                    <td style="width:40%;">
+                        <select data-dojo-attach-point="metodoPago" data-dojo-type="ecm.widget.Select" style="width:300px;">
+                            <option value="PUE">Pago en una sola exhibición (PUE)</option>
+                            <option value="PPD">Pago en parcialidades o diferido (PPD)</option>
+                        </select>	                
+                    </td>             
                 </tr>            
                 <tr>
                     <td width="30%"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">N&uacute;mero de Cuenta:</label></td>
-                    <td style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width:160px;" data-dojo-attach-point="numeroCuenta" maxlength="18" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
-                </tr>                                    
-            </table>
+                    <td width="20%" colspan="2" style="font-family:arial;font-size:12px;font-weight:normal;color:black;"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width:160px;" data-dojo-attach-point="numeroCuenta" maxlength="18" data-dojo-props="regExp:'^[0-9]*$', invalidMessage:'Formato Inválido.'"></div></td>
+                    <td width="10%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Uso de CFDI:</label></td>
+                    <td style="width:40%;">
+                        <select data-dojo-attach-point="usoCFDI" data-dojo-type="ecm.widget.Select" style="width:300px;">
+                            <option value="P01">Por definir (P01)</option>  
+                            <option value="G01">Adquisición de mercancias (G01)</option>
+                            <option value="G02">Devoluciones, descuentos o bonificaciones (F02)</option>
+                            <option value="G03">Gastos en general (G03)</option>
+                            <option value="I01">Construcciones (I01)</option>
+                            <option value="I02">Mobilario y equipo de oficina por inversiones (I02)</option>
+                            <option value="I03">Equipo de transporte (I03)</option>
+                            <option value="I04">Equipo de computo y accesorios (I04)</option>
+                            <option value="I05">Dados, troqueles, moldes, matrices y herramental (I05)</option>
+                            <option value="I06">Comunicaciones telefónicas (I06)</option>
+                            <option value="I07">Comunicaciones satelitales (I07)</option>
+                            <option value="I08">Otra maquinaria y equipo (I08)</option>
+                            <option value="D01">Honorarios médicos, dentales y gastos hospitalarios (D01)</option>
+                            <option value="D02">Gastos médicos por incapacidad o discapacidad (D02)</option>
+                            <option value="D03">Gastos funerales (D03)</option>
+                            <option value="D04">Donativos (D04)</option>
+                            <option value="D05">Intereses reales efectivamente pagados por créditos hipotecarios (D05)</option>
+                            <option value="D06">Aportaciones voluntarias al sar (D06)</option>
+                            <option value="D07">Primas por seguros de gastos médicos (D07)</option>
+                            <option value="D08">Gastos de transportación escolar obligatoria (D08)</option>
+                            <option value="D09">Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones (D09)</option>
+                            <option value="D10">Pagos por servicios educativos (D10)</option>                    
+                        </select>	                
+                    </td>             
+                </tr>        						  				 		
+            </table>            
 			<div data-dojo-attach-point="comisionesPane" style="display:none;">
 			  	<table width="100%" border="0" style="background-color:#FFFFFF;">	 
 			  		<tr>
@@ -73,19 +107,24 @@
 		</div>
 		<div data-dojo-attach-point="tab2" data-dojo-type="dijit.layout.ContentPane" title="Conceptos y Montos" style="background-color:#FFFFFF;" data-dojo-props="selected:false">	
 			<table width="100%" border="0" style="background-color:#FFFFFF;">
-		  		<br>
-		  		<tr>
-			  		<td width="20%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Descripci&oacute;n:</label></td>
-		  			<td colspan="5"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 100%;" data-dojo-attach-point="conceptoDescripcion" required=true></div></td>
-		  		</tr>
-		  		<tr>
-			  		<td width="15%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Unidad:</label></td>
-		  			<td width="15%"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="conceptoUnidad" style="width: 60px;" required="true"></div></td>	  		
-			  		<td width="15%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cantidad:</label></td>
-		  			<td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="conceptoCantidad" style="width: 60px;" value="1" required="true" maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>
-			  		<td width="15%"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Precio Unitario:</label></td>
-		  			<td width="15%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="conceptoPrecioUnitario" style="width: 100px;" value="0" required="true" maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>	  				  			
-		  		</tr>		  			  					
+                <tr>
+                    <td width="5%" align="right"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Descripci&oacute;n:</label></td>
+                    <td width="20%"><div data-dojo-type="ecm.widget.ValidationTextBox" style="width: 400px;" data-dojo-attach-point="conceptoDescripcion" required="true"></div></td>
+                    <td width="5%" align="right"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Clave:</label></td>
+                    <td width="5%"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="conceptoClave" style="width: 60px;" required="false"></div></td>	  		             
+                    <td width="5%" align="right"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">ProdServ:</label></td>
+                    <td width="1%"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="conceptoProdServ" style="width: 100px;" required="true" maxlength="8" data-dojo-props="regExp:'^[0-9]{8}$', invalidMessage:'Formato Inválido.'"></div></td>	  		                                     
+                    <td width="1%"><div data-dojo-attach-point="searchProdServ" class="searchIcon" title="b&uacute;squeda de claves de productos y servicios"></div></td>
+                    <td width="5%" align="right"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Unidad:</label></td>
+                    <td width="5%"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="conceptoUnidad" style="width: 60px;" required="false"></div></td>	  		                    
+                    <td width="5%" align="right"><label style="color:#970303;"></label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">UniMed:</label></td>
+                    <td width="1%"><div data-dojo-type="ecm.widget.ValidationTextBox" data-dojo-attach-point="conceptoUniMed" style="width: 60px;" required="false" uppercase="true" maxlength="3" data-dojo-props="regExp:'^[a-zA-Z0-9]{2,3}$', invalidMessage:'Formato Inválido.'"></div></td>
+                    <td width="1%"><div data-dojo-attach-point="searchUniMed" class="searchIcon" title="b&uacute;squeda de claves de unidades y medidas"></div></td>
+                    <td width="5%" align="right"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Cantidad:</label></td>
+                    <td width="5%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="conceptoCantidad" style="width: 60px;" value="1" required="true" maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>                    
+                    <td width="5%" align="right"><label style="color:#970303;">* </label><label style="font-family:arial;font-size:12px;font-weight:normal;color:black;">Unitario:</label></td>
+                    <td width="5%"><div data-dojo-type="ecm.widget.RangeBoundTextBox" data-dojo-attach-point="conceptoPrecioUnitario" style="width: 80px;" value="0" required="true" maxlength="10" data-dojo-props="constraints: {max: 1.7976931348623157e+308, maxString: '1.7976931348623157E308', min: 0, minString: '0.00'}, pattern: '([+|-]{0,1})([\\d]{0,})([\\.]{0,1})([\\d]{1,})(([eE]([-+]{0,1})([\\d]{1,})){0,1})', invalidMessage:'Formato inválido'"></div></td>	  				  			                    
+                </tr>                		  			  					
 			</table>
 			<table width="100%" border="0" style="background-color:#FFFFFF;">				
 				<tr>

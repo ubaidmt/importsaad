@@ -34,6 +34,8 @@ import com.filenet.api.util.Id;
 import com.ibm.ecm.extension.PluginService;
 import com.ibm.ecm.extension.PluginServiceCallbacks;
 import com.ibm.ecm.extension.util.mail.MailService;
+import com.ibm.ecm.extension.util.map.MetodoPagoMap;
+import com.ibm.ecm.extension.util.map.UsoCFDIMap;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -108,7 +110,11 @@ public class SolDocService extends PluginService {
 			else if (methodName.equals("getSolDocEmpresas"))
 				result = getEmpresas(request, callbacks);
 			else if (methodName.equals("depurarSolDocCatalogos"))
-				result = depurarCatalogos(request, callbacks);			
+				result = depurarCatalogos(request, callbacks);	
+	      	else if (methodName.equals("searchSolDocProdServ"))
+	      		result = searchSolDocProdServ(request, callbacks);
+	      	else if (methodName.equals("searchSolDocUniMed"))
+	      		result = searchSolDocUniMed(request, callbacks);			
 			else
 				throw new Exception("No se identificó el método incluido en el servicio.");
 
@@ -890,6 +896,132 @@ public class SolDocService extends PluginService {
 		return jsonResponse;				
 	}
 	
+	@SuppressWarnings("unchecked")
+	private static JSONObject searchSolDocProdServ(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+		String error = null;
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonResponse = new JSONObject();
+		try
+		{
+		  ObjectStore os = ServiceUtil.getP8Connection(request, callbacks);
+		  
+		  JSONObject criterio = JSONObject.parse(request.getParameter("criterio"));
+		  int maxResults = Integer.parseInt(request.getParameter("maxResults"));
+		  
+		  SearchScope search = new SearchScope(os);
+		  SearchSQL sql = new SearchSQL();
+		  sql.setSelectList("Id, DocumentTitle, Clave");
+		  sql.setFromClauseInitialValue("SolDocProdServ", null, false);
+		  
+		  StringBuffer whereClause = new StringBuffer();
+		  whereClause.append("IsCurrentVersion = TRUE");
+		  if (criterio.get("id") != null)
+		    whereClause.append(" AND Id = " + criterio.get("id"));
+		  if (criterio.get("nameLike") != null)
+		    whereClause.append(" AND DocumentTitle LIKE '%" + criterio.get("nameLike") + "%'");
+		  if (criterio.get("name") != null)
+		    whereClause.append(" AND DocumentTitle = '" + criterio.get("name") + "'");
+		  if (criterio.get("claveLike") != null)
+		    whereClause.append(" AND Clave LIKE '%" + criterio.get("claveLike") + "%'");
+		  if (criterio.get("clave") != null)
+		    whereClause.append(" AND Clave = '" + criterio.get("clave") + "'");
+		  sql.setWhereClause(whereClause.toString());
+		  
+		  if (maxResults > 0)
+		    sql.setMaxRecords(maxResults);
+
+		  RepositoryRowSet rowSet = search.fetchRows(sql, null, null, Boolean.valueOf(true));
+		  for (Iterator<RepositoryRow> it = rowSet.iterator(); it.hasNext(); )
+		  {
+		    	RepositoryRow row = it.next();
+		    	com.filenet.api.property.Properties props = row.getProperties();
+		    
+		    JSONObject jsonObject = new JSONObject();
+		    jsonObject.put("id", props.getIdValue("Id").toString());
+		    jsonObject.put("name", props.getStringValue("DocumentTitle"));
+		    jsonObject.put("clave", props.getStringValue("Clave"));
+		    
+		    jsonArray.add(jsonObject);
+		  }
+		}
+		catch (Exception e)
+		{
+		  e.printStackTrace();
+		  error = e.getMessage();
+		  jsonArray = new JSONArray();
+		}
+		finally
+		{
+		  UserContext.get().popSubject();
+		}
+		jsonResponse.put("error", error);
+		jsonResponse.put("results", jsonArray);
+		return jsonResponse;
+	}
+			  
+	@SuppressWarnings("unchecked")
+	private static JSONObject searchSolDocUniMed(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
+	    String error = null;
+	    JSONArray jsonArray = new JSONArray();
+	    JSONObject jsonResponse = new JSONObject();
+	    try
+	    {
+	      ObjectStore os = ServiceUtil.getP8Connection(request, callbacks);
+	      
+	      JSONObject criterio = JSONObject.parse(request.getParameter("criterio"));
+	      int maxResults = Integer.parseInt(request.getParameter("maxResults"));
+	      
+	      SearchScope search = new SearchScope(os);
+	      SearchSQL sql = new SearchSQL();
+	      sql.setSelectList("Id, DocumentTitle, Clave");
+	      sql.setFromClauseInitialValue("SolDocUniMed", null, false);
+	      
+	      StringBuffer whereClause = new StringBuffer();
+	      whereClause.append("IsCurrentVersion = TRUE");
+	      if (criterio.get("id") != null)
+	        whereClause.append(" AND Id = " + criterio.get("id"));
+	      if (criterio.get("nameLike") != null)
+	        whereClause.append(" AND DocumentTitle LIKE '%" + criterio.get("nameLike") + "%'");
+	      if (criterio.get("name") != null)
+	        whereClause.append(" AND DocumentTitle = '" + criterio.get("name") + "'");
+	      if (criterio.get("claveLike") != null)
+	        whereClause.append(" AND Clave LIKE '%" + criterio.get("claveLike") + "%'");
+	      if (criterio.get("clave") != null)
+	        whereClause.append(" AND Clave = '" + criterio.get("clave") + "'");
+	      sql.setWhereClause(whereClause.toString());
+	      
+	      if (maxResults > 0)
+	        sql.setMaxRecords(maxResults);
+
+		  RepositoryRowSet rowSet = search.fetchRows(sql, null, null, Boolean.valueOf(true));
+		  for (Iterator<RepositoryRow> it = rowSet.iterator(); it.hasNext(); )
+		  {
+		    	RepositoryRow row = it.next();
+		    	com.filenet.api.property.Properties props = row.getProperties();
+	        
+	        JSONObject jsonObject = new JSONObject();
+	        jsonObject.put("id", props.getIdValue("Id").toString());
+	        jsonObject.put("name", props.getStringValue("DocumentTitle"));
+	        jsonObject.put("clave", props.getStringValue("Clave"));
+	        
+	        jsonArray.add(jsonObject);
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	      error = e.getMessage();
+	      jsonArray = new JSONArray();
+	    }
+	    finally
+	    {
+	      UserContext.get().popSubject();
+	    }
+	    jsonResponse.put("error", error);
+	    jsonResponse.put("results", jsonArray);
+	    return jsonResponse;
+	}		
+	
 	private static JSONObject getCurrentDocumentId(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		String error = null;	
@@ -920,81 +1052,82 @@ public class SolDocService extends PluginService {
     	jsonResponse.put("documento", jsonObject);
 		return jsonResponse;		
 		
-	}				
+	}	
 	
 	@SuppressWarnings("unchecked")
 	private static JSONObject getDatosFactura(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
-		
-		String error = null;	
+		String error = null;
 		JSONArray jsonSolicitudes = new JSONArray();
-
-		try {
-			
+		try
+		{
 			JSONArray jsonItems = JSONArray.parse(request.getParameter("items"));
-			
+		      
 			// Get p8 connection based on context
 			ObjectStore objStore = ServiceUtil.getP8Connection(request, callbacks);
-
-			for (Object obj : jsonItems) 
-			{
-				JSONObject jsonItem = (JSONObject) obj;	 
-				JSONObject jsonSolicitud = new JSONObject();
-				Folder solicitud = Factory.Folder.fetchInstance(objStore, jsonItem.get("id").toString(), null);
-				com.filenet.api.property.Properties props = solicitud.getProperties();
-				jsonSolicitud.put("id", solicitud.get_Id().toString());
-				jsonSolicitud.put("numeroFactura", props.getStringValue("NumeroFactura"));
-				jsonSolicitud.put("fechaFactura", null);
-				if (props.getDateTimeValue("FechaFactura") != null) {
-					jsonSolicitud.put("fechaFactura", sdf.format(ServiceUtil.getUTFCalendar(props.getDateTimeValue("FechaFactura")).getTime()));
-				}
-				jsonSolicitud.put("empresaNombre", null);
-				if (props.getObjectValue("Empresa") != null) {
-					Folder empresa = (Folder) props.getEngineObjectValue("Empresa");
-					jsonSolicitud.put("empresaNombre", empresa.get_FolderName());
-				}
-				jsonSolicitud.put("estado", props.getInteger32Value("EstadoCFDI"));
-		    	byte[] data = props.getBinaryValue("ClbJSONData");
-		    	JSONObject jsonData = JSONObject.parse(new String(data));
-				jsonSolicitud.put("datos", jsonData);
 				
-				jsonSolicitud.put("filePDF", null);
-				jsonSolicitud.put("fileXML", null);
-				DocumentSet docSet = solicitud.get_ContainedDocuments();
-				for (Iterator<Document> it = docSet.iterator(); it.hasNext();) {
-					Document doc = it.next();
-					if (doc.getClassName().equals("SolDocCFDI") && doc.getProperties().getInteger32Value("TipoCFDI") == 0) { // PDF
-						JSONObject jsonContent = new JSONObject();
-						ContentTransfer ct = (ContentTransfer) doc.get_ContentElements().get(0);
-						jsonContent.put("id", doc.get_Id().toString());
-						jsonContent.put("name", ct.get_RetrievalName());
-						jsonSolicitud.put("filePDF", jsonContent);						
-					} else if (doc.getClassName().equals("SolDocCFDI") && doc.getProperties().getInteger32Value("TipoCFDI") == 1) { // XML
-						JSONObject jsonContent = new JSONObject();
-						ContentTransfer ct = (ContentTransfer) doc.get_ContentElements().get(0);
-						jsonContent.put("id", doc.get_Id().toString());
-						jsonContent.put("name", ct.get_RetrievalName());
-						jsonSolicitud.put("fileXML", jsonContent);								
-					}
-				}
-
-				jsonSolicitudes.add(jsonSolicitud);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			error = e.getMessage();
-			
-		} finally {
-			UserContext.get().popSubject();
-		}	
-		
-		// Result
+			for (Object obj : jsonItems)
+			{
+			    JSONObject jsonItem = (JSONObject)obj;
+			    JSONObject jsonSolicitud = new JSONObject();
+			    Folder solicitud = Factory.Folder.fetchInstance(objStore, jsonItem.get("id").toString(), null);
+			    com.filenet.api.property.Properties props = solicitud.getProperties();
+			    jsonSolicitud.put("id", solicitud.get_Id().toString());
+			    jsonSolicitud.put("numeroFactura", props.getStringValue("NumeroFactura"));
+			    jsonSolicitud.put("fechaFactura", null);
+			    if (props.getDateTimeValue("FechaFactura") != null) {
+			      jsonSolicitud.put("fechaFactura", sdf.format(ServiceUtil.getUTFCalendar(props.getDateTimeValue("FechaFactura")).getTime()));
+			    }
+			    jsonSolicitud.put("empresaNombre", null);
+			    if (props.getObjectValue("Empresa") != null)
+			    {
+			      Folder empresa = (Folder)props.getEngineObjectValue("Empresa");
+			      jsonSolicitud.put("empresaNombre", empresa.get_FolderName());
+			    }
+			    jsonSolicitud.put("estado", props.getInteger32Value("EstadoCFDI"));
+			    byte[] data = props.getBinaryValue("ClbJSONData");
+			    JSONObject jsonData = JSONObject.parse(new String(data));
+			    jsonSolicitud.put("datos", normalizeData(jsonData));
+			    
+			    jsonSolicitud.put("filePDF", null);
+			    jsonSolicitud.put("fileXML", null);
+			    DocumentSet docSet = solicitud.get_ContainedDocuments();
+			    for (Iterator<Document> it = docSet.iterator(); it.hasNext();)
+			    {
+			      Document doc = (Document)it.next();
+			      if ((doc.getClassName().equals("SolDocCFDI")) && (doc.getProperties().getInteger32Value("TipoCFDI").intValue() == 0))
+			      {
+			        JSONObject jsonContent = new JSONObject();
+			        ContentTransfer ct = (ContentTransfer)doc.get_ContentElements().get(0);
+			        jsonContent.put("id", doc.get_Id().toString());
+			        jsonContent.put("name", ct.get_RetrievalName());
+			        jsonSolicitud.put("filePDF", jsonContent);
+			      }
+			      else if ((doc.getClassName().equals("SolDocCFDI")) && (doc.getProperties().getInteger32Value("TipoCFDI").intValue() == 1))
+			      {
+			        JSONObject jsonContent = new JSONObject();
+			        ContentTransfer ct = (ContentTransfer)doc.get_ContentElements().get(0);
+			        jsonContent.put("id", doc.get_Id().toString());
+			        jsonContent.put("name", ct.get_RetrievalName());
+			        jsonSolicitud.put("fileXML", jsonContent);
+			      }
+			    }
+			    jsonSolicitudes.add(jsonSolicitud);
+		  }
+		}
+		catch (Exception e)
+		{
+		  e.printStackTrace();
+		  error = e.getMessage();
+		}
+		finally
+		{
+		  UserContext.get().popSubject();
+		}
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("error", error);
-    	jsonResponse.put("solicitudes", jsonSolicitudes);
-		return jsonResponse;		
-		
-	}				
+		jsonResponse.put("solicitudes", jsonSolicitudes);
+		return jsonResponse;
+	}	
 	
 	@SuppressWarnings("unchecked")
 	private static JSONObject updateFactura(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
@@ -1180,7 +1313,9 @@ public class SolDocService extends PluginService {
 			
 			// Actualiza metodo de pago y numero de cuenta
 			jsonObj.put("metodoPago", jsonData.get("metodoPago"));
-			jsonObj.put("numeroCuenta", jsonData.get("numeroCuenta"));				
+			jsonObj.put("numeroCuenta", jsonData.get("numeroCuenta"));		
+            jsonObj.put("metodoPago2", jsonData.get("metodoPago2"));
+            jsonObj.put("usoCFDI", jsonData.get("usoCFDI"));            
 			
 			// Actualiza conceptos
 			jsonObj.put("conceptos", jsonData.get("conceptos"));
@@ -1216,15 +1351,14 @@ public class SolDocService extends PluginService {
 		// Result
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("error", error);
-		return jsonResponse;		
-		
-	}		
+		return jsonResponse;			
+	}	
 	
 	private static JSONObject addSolicitudFactura(HttpServletRequest request, PluginServiceCallbacks callbacks) throws Exception {
 		
 		int status = 0; // success
-    	String error = null;	
-    	String folio = null; 
+	    	String error = null;	
+	    	String folio = null; 
 		JSONArray jsonFolios = new JSONArray();
 
 		try {
@@ -1539,80 +1673,85 @@ public class SolDocService extends PluginService {
 	}
 	
 	private static void notificaSolicitudFactura(ObjectStore os, List<String> folios, Folder solicitud, String observaciones, Folder proveedor, boolean forceSingleCopy) throws Exception {
-		
-		// Get copia oculta de configuracion general
-		Document settings = Factory.Document.fetchInstance(os, "/Settings/SolDocSettings", null);
-		byte[] data = settings.getProperties().getBinaryValue("ClbJSONData");		
-		JSONObject jsonSettings = JSONObject.parse(new String(data));
-		
-		// Get datos proveedor
-    	data = proveedor.getProperties().getBinaryValue("ClbJSONData");
-    	JSONObject jsonDatosProveedor = JSONObject.parse(new String(data));				
-						
-		// Get datos solicitud
-    	data = solicitud.getProperties().getBinaryValue("ClbJSONData");
-    	JSONObject jsonDatosSolicitud = JSONObject.parse(new String(data));		
-		
-		// Set parametros para notificacion
-		String to = jsonDatosProveedor.get("contactoMailTo").toString();
-		String cc = jsonDatosProveedor.get("contactoMailCc").toString();
-		String alias = jsonSettings.get("emailAlias").toString();		
-		String bcc = jsonSettings.get("emailBcc").toString();
-		String subject = "Solicitud de Factura";
-		List<String> templateNames = new ArrayList<String>();
-		templateNames.add("contactoNombre");
-		templateNames.add("empresaSolicitada");
-		templateNames.add("numeroCopias");
-		templateNames.add("razonSocial");
-		templateNames.add("rfc");
-		templateNames.add("direccionFiscal");
-		templateNames.add("metodoPago");
-		templateNames.add("numeroCuenta");
-		templateNames.add("subTotal");
-		templateNames.add("iva");
-		templateNames.add("montoTotal");
-		templateNames.add("folios");
-		templateNames.add("conceptos");
-		templateNames.add("observaciones");
-		List<String> templateValues = new ArrayList<String>();
-		templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosProveedor.get("contactoNombre").toString()));
-		//templateValues.add((!jsonDatosSolicitud.containsKey("empresaSolicitada") ? "" : jsonDatosSolicitud.get("empresaSolicitada").toString()));
-		templateValues.add(jsonDatosSolicitud.get("nombreEmpresa") != null ? jsonDatosSolicitud.get("nombreEmpresa").toString(): "");
-		templateValues.add((forceSingleCopy ? "1" : jsonDatosSolicitud.get("numeroCopias").toString()));
-		templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.get("razonSocial").toString()));
-		templateValues.add(jsonDatosSolicitud.get("rfc").toString());
-		templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.get("direccionFiscal").toString()));
-		templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.containsKey("metodoPago") ? metodosPagoToString(JSONObject.parse(jsonDatosSolicitud.get("metodoPago").toString())) : ""));
-		templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.containsKey("numeroCuenta") ? jsonDatosSolicitud.get("numeroCuenta").toString() : ""));
-		templateValues.add(df.format(jsonDatosSolicitud.get("subTotal")));
-		templateValues.add(df.format(jsonDatosSolicitud.get("iva")));
-		templateValues.add(df.format(jsonDatosSolicitud.get("montoTotal")));
-		templateValues.add(folios.toString());
-		StringBuffer conceptosBuffer = new StringBuffer();
-		JSONArray jsonConceptos = (JSONArray) jsonDatosSolicitud.get("conceptos");
-		for (Object obj : jsonConceptos) {
-			JSONObject concepto = (JSONObject) obj;
-			conceptosBuffer.append("<tr>");
-			conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoDescripcion").toString()) + "</td>");
-			conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoUnidad").toString()) + "</td>");
-			conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + concepto.get("conceptoCantidad").toString() + "</td>");
-			conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + df.format(concepto.get("conceptoPrecioUnitario")) + "</td>");
-			conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + df.format(concepto.get("conceptoImporte")) + "</td>");
-			conceptosBuffer.append("</tr>");			
-		}
-		templateValues.add(conceptosBuffer.toString());
-		if (observaciones == null)
-			observaciones = jsonDatosSolicitud.get("observaciones").toString();
-		templateValues.add(StringEscapeUtils.escapeHtml(observaciones));	
-
-		// Get plantilla de notificacion
-		Document template = Factory.Document.fetchInstance(os, "/Plantillas/Notificacion Solicitud de Factura.html", null);			
-		
-		// Envia notificacion
-		MailService mailService = new MailService(jsonSettings);
-		mailService.sendTemplateMail(to, cc, bcc, alias, subject, template, templateNames, templateValues, new ArrayList<Document>());
-
-	}
+	    MetodoPagoMap metodoPagoMap = new MetodoPagoMap();
+	    UsoCFDIMap usoCFDIMap = new UsoCFDIMap();
+	    
+	    Document settings = Factory.Document.fetchInstance(os, "/Settings/SolDocSettings", null);
+	    byte[] data = settings.getProperties().getBinaryValue("ClbJSONData");
+	    JSONObject jsonSettings = JSONObject.parse(new String(data));
+	    
+	    data = proveedor.getProperties().getBinaryValue("ClbJSONData");
+	    JSONObject jsonDatosProveedor = JSONObject.parse(new String(data));
+	    
+	    data = solicitud.getProperties().getBinaryValue("ClbJSONData");
+	    JSONObject jsonDatosSolicitud = JSONObject.parse(new String(data));
+	    jsonDatosSolicitud = normalizeData(jsonDatosSolicitud);
+	    
+	    String to = jsonDatosProveedor.get("contactoMailTo").toString();
+	    String cc = jsonDatosProveedor.get("contactoMailCc").toString();
+	    String alias = jsonSettings.get("emailAlias").toString();
+	    String bcc = jsonSettings.get("emailBcc").toString();
+	    String subject = "Solicitud de Factura";
+	    List<String> templateNames = new ArrayList<String>();
+	    templateNames.add("contactoNombre");
+	    templateNames.add("empresaSolicitada");
+	    templateNames.add("numeroCopias");
+	    templateNames.add("razonSocial");
+	    templateNames.add("rfc");
+	    templateNames.add("direccionFiscal");
+	    templateNames.add("formaPago");
+	    templateNames.add("metodoPago");
+	    templateNames.add("usoCFDI");
+	    templateNames.add("numeroCuenta");
+	    templateNames.add("subTotal");
+	    templateNames.add("iva");
+	    templateNames.add("montoTotal");
+	    templateNames.add("folios");
+	    templateNames.add("conceptos");
+	    templateNames.add("observaciones");
+	    List<String> templateValues = new ArrayList<String>();
+	    templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosProveedor.get("contactoNombre").toString()));
+	    
+	    templateValues.add(jsonDatosSolicitud.get("nombreEmpresa") != null ? jsonDatosSolicitud.get("nombreEmpresa").toString() : "");
+	    templateValues.add(forceSingleCopy ? "1" : jsonDatosSolicitud.get("numeroCopias").toString());
+	    templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.get("razonSocial").toString()));
+	    templateValues.add(jsonDatosSolicitud.get("rfc").toString());
+	    templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.get("direccionFiscal").toString()));
+	    templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.containsKey("metodoPago") ? metodosPagoToString(JSONObject.parse(jsonDatosSolicitud.get("metodoPago").toString())) : ""));
+	    templateValues.add(StringEscapeUtils.escapeHtml((String)metodoPagoMap.get(jsonDatosSolicitud.get("metodoPago2").toString())));
+	    templateValues.add(StringEscapeUtils.escapeHtml((String)usoCFDIMap.get(jsonDatosSolicitud.get("usoCFDI").toString())));
+	    templateValues.add(StringEscapeUtils.escapeHtml(jsonDatosSolicitud.containsKey("numeroCuenta") ? jsonDatosSolicitud.get("numeroCuenta").toString() : ""));
+	    templateValues.add(df.format(jsonDatosSolicitud.get("subTotal")));
+	    templateValues.add(df.format(jsonDatosSolicitud.get("iva")));
+	    templateValues.add(df.format(jsonDatosSolicitud.get("montoTotal")));
+	    templateValues.add(folios.toString());
+	    StringBuffer conceptosBuffer = new StringBuffer();
+	    JSONArray jsonConceptos = (JSONArray)jsonDatosSolicitud.get("conceptos");
+	    for (Object obj : jsonConceptos)
+	    {
+	      JSONObject concepto = (JSONObject)obj;
+	      conceptosBuffer.append("<tr>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoDescripcion").toString()) + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoClave").toString()) + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoProdServ").toString()) + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoUnidad").toString()) + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + StringEscapeUtils.escapeHtml(concepto.get("conceptoUniMed").toString()) + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + concepto.get("conceptoCantidad").toString() + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + df.format(concepto.get("conceptoPrecioUnitario")) + "</td>");
+	      conceptosBuffer.append("<td style='background:#dcddc0; border-width: 1px; padding: 4px; border-style: solid;'>" + df.format(concepto.get("conceptoImporte")) + "</td>");
+	      conceptosBuffer.append("</tr>");
+	    }
+	    templateValues.add(conceptosBuffer.toString());
+	    if (observaciones == null) {
+	      observaciones = jsonDatosSolicitud.get("observaciones").toString();
+	    }
+	    templateValues.add(StringEscapeUtils.escapeHtml(observaciones));
+	    
+	    Document template = Factory.Document.fetchInstance(os, "/Plantillas/Notificacion Solicitud de Factura.html", null);
+	    
+	    MailService mailService = new MailService(jsonSettings);
+	    mailService.sendTemplateMail(to, cc, bcc, alias, subject, template, templateNames, templateValues, new ArrayList<Document>());
+	}	
 	
 	private static String metodosPagoToString(JSONObject jsonObject) throws Exception {
 		// convert to readable mode
@@ -1709,6 +1848,30 @@ public class SolDocService extends PluginService {
 		}
 		
 		return mesFolder;
-	}	
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static JSONObject normalizeData(JSONObject jsonData) throws Exception {
+	    if (!jsonData.containsKey("metodoPago2"))
+	      jsonData.put("metodoPago2", "PUE");
+	    if (!jsonData.containsKey("usoCFDI"))
+	      jsonData.put("usoCFDI", "P01");
+
+	    JSONArray normalizedConceptos = new JSONArray();
+	    JSONArray conceptos = (JSONArray)jsonData.get("conceptos");
+	    for (Iterator<JSONObject> it = conceptos.iterator(); it.hasNext();)
+	    {
+	      JSONObject concepto = (JSONObject)it.next();
+	      if (!concepto.containsKey("conceptoClave"))
+	        concepto.put("conceptoClave", "");
+	      if (!concepto.containsKey("conceptoProdServ"))
+	        concepto.put("conceptoProdServ", "");
+	      if (!concepto.containsKey("conceptoUniMed"))
+	        concepto.put("conceptoUniMed", "");
+	      normalizedConceptos.add(concepto);
+	    }
+	    jsonData.put("conceptos", normalizedConceptos);
+	    return jsonData;
+	}
 	
 }
